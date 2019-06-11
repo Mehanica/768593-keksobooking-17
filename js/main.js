@@ -7,13 +7,16 @@ var PIN_OFFSET = {
   y: 70
 };
 
-var MINIMAL_LOCATION_Y_VALUE = 130;
-var MAXIMAL_LOCATION_Y_VALUE = 630;
-var MAP = document.querySelector('.map');
+var MapLimitY = {
+  min: 130,
+  max: 630
+};
+
+var map = document.querySelector('.map');
 
 var TEMPLATE = document.querySelector('#pin').content.querySelector('button');
 
-var PINS = document.querySelector('.map__pins');
+var PINS = map.querySelector('.map__pins');
 var FRAGMENT = document.createDocumentFragment();
 
 
@@ -42,7 +45,7 @@ var createAdvertisements = function () {
 
       'location': {
         'x': getInteger(0, window.innerWidth),
-        'y': getInteger(MINIMAL_LOCATION_Y_VALUE, MAXIMAL_LOCATION_Y_VALUE)
+        'y': getInteger(MapLimitY.min, MapLimitY.max)
       }
     };
     advertisements.push(card);
@@ -51,7 +54,7 @@ var createAdvertisements = function () {
   return advertisements;
 };
 
-MAP.classList.remove('map--faded');
+map.classList.remove('map--faded');
 
 var advertisements = createAdvertisements();
 
