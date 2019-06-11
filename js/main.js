@@ -1,5 +1,6 @@
 'use strict';
 
+var ADVERTISEMENTS_QUANTITY = 8;
 var OFFER_TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var PIN_OFFSET = {
   x: 25,
@@ -8,9 +9,13 @@ var PIN_OFFSET = {
 
 var MINIMAL_LOCATION_Y_VALUE = 130;
 var MAXIMAL_LOCATION_Y_VALUE = 630;
+var MAP = document.querySelector('.map');
+
+var TEMPLATE = document.querySelector('#pin').content.querySelector('button');
 
 var PINS = document.querySelector('.map__pins');
 var FRAGMENT = document.createDocumentFragment();
+
 
 var getInteger = function (min, max) {
 
@@ -25,7 +30,7 @@ var createAdvertisements = function () {
 
   var advertisements = [];
 
-  for (var i = 1; i <= 8; i++) {
+  for (var i = 1; i <= ADVERTISEMENTS_QUANTITY; i++) {
     var card = {
       'author': {
         'avatar': 'img/avatars/user0' + i + '.png'
@@ -46,33 +51,28 @@ var createAdvertisements = function () {
   return advertisements;
 };
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+MAP.classList.remove('map--faded');
 
-var createTemplate = function () {
+var advertisements = createAdvertisements();
 
-  var advertisements = createAdvertisements();
+var createPin = function (advertisement) {
 
-  var template = document
-    .querySelector('#pin')
-    .content
-    .querySelector('button');
+  var element = TEMPLATE.cloneNode(true);
 
-  for (var i = 0; i < advertisements.length; i++) {
-    var element = template.cloneNode(true);
+  element.style.left = advertisement.location.x - PIN_OFFSET.x + 'px';
+  element.style.top = advertisement.location.y - PIN_OFFSET.y + 'px';
+  element.children[0].src = advertisement.author.avatar;
+  element.children[0].alt = 'заголовок объявления';
 
-    element.style.left = advertisements[i].location.x - PIN_OFFSET.x + 'px';
-    element.style.top = advertisements[i].location.y - PIN_OFFSET.y + 'px';
-    element.children[0].src = advertisements[i].author.avatar;
-    element.children[0].alt = 'заголовок объявления';
-
-    FRAGMENT.appendChild(element);
-  }
+  return element;
 };
 
-var renderTemplate = function () {
+var showPins = function () {
+  for (var i = 0; i < advertisements.length; i++) {
+    FRAGMENT.appendChild(createPin(advertisements[i]));
+  }
 
   PINS.appendChild(FRAGMENT);
 };
-createTemplate();
-renderTemplate();
+
+showPins();
