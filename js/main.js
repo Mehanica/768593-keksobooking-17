@@ -22,11 +22,12 @@ var TEMPLATE = document.querySelector('#pin').content.querySelector('button');
 var PINS = map.querySelector('.map__pins');
 var FRAGMENT = document.createDocumentFragment();
 var userPin = document.querySelector('.map__pin--main');
-var inputAddress = form.querySelector('#address');
+
 var FiltersForm = document.querySelector('.map__filters');
 var mapFilters = FiltersForm.querySelectorAll('.map__filter');
 var checkboxesFieldset = FiltersForm.querySelector('.map__features');
 var form = document.querySelector('.ad-form');
+var inputAddress = form.querySelector('#address');
 var adFormHeader = form.querySelector('.ad-form-header');
 var adFormElements = form.querySelectorAll('.ad-form__element');
 
