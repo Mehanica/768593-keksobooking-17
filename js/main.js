@@ -7,18 +7,28 @@ var PIN_OFFSET = {
   y: 70
 };
 
+var USER_PIN_OFFSET = {
+  x: 31,
+  y: 84
+};
+
 var MapLimitY = {
   min: 130,
   max: 630
 };
 
 var map = document.querySelector('.map');
-
 var TEMPLATE = document.querySelector('#pin').content.querySelector('button');
-
 var PINS = map.querySelector('.map__pins');
 var FRAGMENT = document.createDocumentFragment();
-
+var userPin = document.querySelector('.map__pin--main');
+var inputAddress = form.querySelector('#address');
+var FiltersForm = document.querySelector('.map__filters');
+var mapFilters = FiltersForm.querySelectorAll('.map__filter');
+var checkboxesFieldset = FiltersForm.querySelector('.map__features');
+var form = document.querySelector('.ad-form');
+var adFormHeader = form.querySelector('.ad-form-header');
+var adFormElements = form.querySelectorAll('.ad-form__element');
 
 var getInteger = function (min, max) {
 
@@ -54,8 +64,6 @@ var createAdvertisements = function () {
   return advertisements;
 };
 
-map.classList.remove('map--faded');
-
 var advertisements = createAdvertisements();
 
 var createPin = function (advertisement) {
@@ -78,4 +86,47 @@ var showPins = function () {
   PINS.appendChild(FRAGMENT);
 };
 
-showPins();
+var toggleElementsListDisabledValue = function (elementsList) {
+
+  for (var i = 0; i < elementsList.length; i++) {
+    elementsList[i].disabled = !elementsList[i].disabled;
+  }
+};
+
+var toggleElementDisabledValue = function (element) {
+
+  element.disabled = !element.disabled;
+};
+
+var toggleFormElementsDisabledValue = function () {
+
+  toggleElementsListDisabledValue(mapFilters);
+  toggleElementsListDisabledValue(adFormElements);
+  toggleElementDisabledValue(FiltersForm);
+  toggleElementDisabledValue(checkboxesFieldset);
+  toggleElementDisabledValue(adFormHeader);
+};
+
+toggleFormElementsDisabledValue();
+
+var firstUserPinClickHandler = function () {
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+  showPins();
+  toggleFormElementsDisabledValue();
+  userPin.removeEventListener('click', firstUserPinClickHandler);
+};
+
+userPin.addEventListener('click', firstUserPinClickHandler);
+
+var getUserPinLocation = function () {
+
+  return parseInt(userPin.style.left, 10) + USER_PIN_OFFSET.x + ', ' + (parseInt(userPin.style.top, 10) + USER_PIN_OFFSET.y);
+};
+
+var userPinMouseUpHandler = function () {
+
+  inputAddress.value = getUserPinLocation();
+};
+
+userPin.addEventListener('mouseup', userPinMouseUpHandler);
