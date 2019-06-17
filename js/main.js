@@ -21,14 +21,11 @@ var map = document.querySelector('.map');
 var TEMPLATE = document.querySelector('#pin').content.querySelector('button');
 var PINS = map.querySelector('.map__pins');
 var FRAGMENT = document.createDocumentFragment();
-var userPin = document.querySelector('.map__pin--main');
-
-var FiltersForm = document.querySelector('.map__filters');
-var mapFilters = FiltersForm.querySelectorAll('.map__filter');
-var checkboxesFieldset = FiltersForm.querySelector('.map__features');
+var userPin = map.querySelector('.map__pin--main');
+var filtersForm = document.querySelector('.map__filters');
+var mapFilters = filtersForm.querySelectorAll('.map__filter');
 var form = document.querySelector('.ad-form');
 var inputAddress = form.querySelector('#address');
-var adFormHeader = form.querySelector('.ad-form-header');
 var adFormElements = form.querySelectorAll('.ad-form__element');
 
 var getInteger = function (min, max) {
@@ -87,34 +84,27 @@ var showPins = function () {
   PINS.appendChild(FRAGMENT);
 };
 
-var toggleElementsListDisabledValue = function (elementsList) {
+var toggleElementsListState = function (elementsList) {
 
   for (var i = 0; i < elementsList.length; i++) {
     elementsList[i].disabled = !elementsList[i].disabled;
   }
 };
 
-var toggleElementDisabledValue = function (element) {
+var toggleFormElementsState = function () {
 
-  element.disabled = !element.disabled;
+  toggleElementsListState(mapFilters);
+  toggleElementsListState(adFormElements);
+  toggleElementsListState(filtersForm.children);
 };
 
-var toggleFormElementsDisabledValue = function () {
-
-  toggleElementsListDisabledValue(mapFilters);
-  toggleElementsListDisabledValue(adFormElements);
-  toggleElementDisabledValue(FiltersForm);
-  toggleElementDisabledValue(checkboxesFieldset);
-  toggleElementDisabledValue(adFormHeader);
-};
-
-toggleFormElementsDisabledValue();
+toggleFormElementsState();
 
 var firstUserPinClickHandler = function () {
   map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
   showPins();
-  toggleFormElementsDisabledValue();
+  toggleFormElementsState();
   userPin.removeEventListener('click', firstUserPinClickHandler);
 };
 
