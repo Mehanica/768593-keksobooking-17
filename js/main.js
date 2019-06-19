@@ -181,10 +181,12 @@ var inputInvalidHadler = function (evt) {
 };
 
 titleField.addEventListener('invalid', function (evt) {
+
   inputInvalidHadler(evt);
 });
 
 priceField.addEventListener('invalid', function (evt) {
+
   inputInvalidHadler(evt);
 });
 
