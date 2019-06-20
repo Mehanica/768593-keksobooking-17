@@ -100,27 +100,84 @@ var toggleFormElementsState = function () {
 
 toggleFormElementsState();
 
-var firstUserPinClickHandler = function () {
+var MAP_WIDTH = 1200;
+var USER_PIN_WIDTH = 62;
+var locationBorderX = {
+  min: 0,
+  max: MAP_WIDTH - USER_PIN_WIDTH
+};
+
+var locationBorderY = {
+  min: 130,
+  max: 630
+};
+
+var calcLocationBorder = function (x, y) {
+
+  if (y < locationBorderY.min) {
+
+    userPin.style.top = locationBorderY.min + 'px';
+  } else if (y > locationBorderY.max) {
+
+    userPin.style.top = locationBorderY.max + 'px';
+  } else if (x < locationBorderX.min) {
+
+    userPin.style.left = locationBorderX.min + 'px';
+  } else if (x > locationBorderX.max) {
+
+    userPin.style.left = locationBorderX.max + 'px';
+  }
+};
+
+var userPinMouseDownHandler = function (evt) {
+  evt.preventDefault();
   map.classList.remove('map--faded');
   form.classList.remove('ad-form--disabled');
   showPins();
   toggleFormElementsState();
-  userPin.removeEventListener('click', firstUserPinClickHandler);
+
+  var startCoordinates = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var mouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoordinates.x - moveEvt.clientX,
+      y: startCoordinates.y - moveEvt.clientY
+    };
+
+    startCoordinates = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    userPin.style.top = (userPin.offsetTop - shift.y) + 'px';
+    userPin.style.left = (userPin.offsetLeft - shift.x) + 'px';
+    calcLocationBorder(userPin.offsetLeft - shift.x, userPin.offsetTop - shift.y);
+  };
+
+  var mouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+    inputAddress.value = getUserPinLocation();
+
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+  };
+
+  var getUserPinLocation = function () {
+
+    return parseInt(userPin.style.left, 10) + USER_PIN_OFFSET.x + ', ' + (parseInt(userPin.style.top, 10) + USER_PIN_OFFSET.y);
+  };
+
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
 };
 
-userPin.addEventListener('click', firstUserPinClickHandler);
+userPin.addEventListener('mousedown', userPinMouseDownHandler);
 
-var getUserPinLocation = function () {
-
-  return parseInt(userPin.style.left, 10) + USER_PIN_OFFSET.x + ', ' + (parseInt(userPin.style.top, 10) + USER_PIN_OFFSET.y);
-};
-
-var userPinMouseUpHandler = function () {
-
-  inputAddress.value = getUserPinLocation();
-};
-
-userPin.addEventListener('mouseup', userPinMouseUpHandler);
 
 var selectTypeOfHousing = form.querySelector('#type');
 var priceField = form.querySelector('#price');
@@ -190,7 +247,6 @@ priceField.addEventListener('invalid', function (evt) {
   inputInvalidHadler(evt);
 });
 
-
 // var main = document.querySelector('main');
 // var successTemplate = main.querySelector('#success');
 
@@ -202,3 +258,32 @@ priceField.addEventListener('invalid', function (evt) {
 
 // form.addEventListener('valid', formValidHandler);
 
+
+// Функция с существительными
+
+// var nouns = ['рубль', 'рубля', 'рублей'];
+
+// var getLastCharacterOfString = function (string) {
+
+//   return string[string.length - 1];
+// };
+
+// var declensionOfNouns = function (number, nouns) {
+
+//   var stringNumber = number.toString();
+
+//   if (getLastCharacterOfString(stringNumber) === '1') {
+
+//     console.log(number + ' ' + nouns[0]);
+
+//   } else if (getLastCharacterOfString(stringNumber) === '2' || getLastCharacterOfString(stringNumber) === '3' || getLastCharacterOfString(stringNumber) === '4') {
+
+//     console.log(number + ' ' + nouns[1]);
+
+//   } else {
+
+//     console.log(number + ' ' + nouns[2]);
+//   }
+// };
+
+// declensionOfNouns(695871, nouns);
