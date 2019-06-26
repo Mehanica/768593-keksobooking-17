@@ -11,6 +11,13 @@
 
   var advertisements = window.card.createAdvertisements();
 
+  var successHandler = function (data) {
+
+    console.log(data);
+  };
+
+  window.download(successHandler);
+
   var createPin = function (advertisement) {
 
     var element = TEMPLATE.cloneNode(true);
