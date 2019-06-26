@@ -3,6 +3,7 @@
 (function () {
 
   var URL = 'https://js.dump.academy/keksobooking/data';
+  var successfulStatus = 200;
 
   var onError = function () {
 
@@ -22,7 +23,7 @@
 
     xhr.addEventListener('load', function () {
 
-      if (xhr.status === 200) {
+      if (xhr.status === successfulStatus) {
         onSuccess(xhr.response);
       } else {
         onError();
