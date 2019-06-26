@@ -17,10 +17,18 @@
   var inputAddress = form.querySelector('#address');
   var adFormElements = form.querySelectorAll('.ad-form__element');
 
+  var advertisements;
+
+  var onSuccess = function (data) {
+
+    advertisements = data;
+  };
+
+  window.download(onSuccess);
 
   var showPins = function () {
-    for (var i = 0; i < window.pin.advertisements.length; i++) {
-      FRAGMENT.appendChild(window.pin.createPin(window.pin.advertisements[i]));
+    for (var i = 0; i < advertisements.length; i++) {
+      FRAGMENT.appendChild(window.pin.createPin(advertisements[i]));
     }
 
     PINS.appendChild(FRAGMENT);
