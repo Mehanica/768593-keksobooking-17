@@ -7,6 +7,8 @@
     y: 84
   };
 
+  var DISPLAY_PINS_LIMIT = 5;
+
   var map = document.querySelector('.map');
   var PINS = map.querySelector('.map__pins');
   var FRAGMENT = document.createDocumentFragment();
@@ -26,9 +28,29 @@
 
   window.download(onSuccess);
 
-  var showPins = function () {
-    for (var i = 0; i < advertisements.length; i++) {
-      FRAGMENT.appendChild(window.pin.createPin(advertisements[i]));
+  var removePins = function () {
+
+    for (var i = PINS.children.length - 3; i >= 0; i--) {
+
+      PINS.children[PINS.children.length - 1].remove();
+    }
+  };
+
+  var housingTypeSelectChangeHandler = function () {
+
+    var filtered = window.filtration.filterHousingType(advertisements);
+
+    removePins();
+
+    showPins(window.util.getLimitedSizeArray(filtered, DISPLAY_PINS_LIMIT));
+  };
+
+  window.filtration.housingTypeSelect.addEventListener('change', housingTypeSelectChangeHandler);
+
+  var showPins = function (data) {
+
+    for (var i = 0; i < data.length; i++) {
+      FRAGMENT.appendChild(window.pin.createPin(data[i]));
     }
 
     PINS.appendChild(FRAGMENT);
@@ -83,7 +105,7 @@
 
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
-    showPins();
+    showPins(window.util.getLimitedSizeArray(advertisements, DISPLAY_PINS_LIMIT));
     toggleFormElementsState();
 
     userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);
@@ -138,6 +160,7 @@
   userPin.addEventListener('mousedown', userPinMouseDownHandler);
 
   window.map = {
-    form: form
+    form: form,
+    advertisements: advertisements
   };
 })();
