@@ -10,8 +10,8 @@
   var DISPLAY_PINS_LIMIT = 5;
 
   var map = document.querySelector('.map');
-  var PINS = map.querySelector('.map__pins');
-  var FRAGMENT = document.createDocumentFragment();
+  var pins = map.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
   var userPin = map.querySelector('.map__pin--main');
   var filtersForm = document.querySelector('.map__filters');
   var mapFilters = filtersForm.querySelectorAll('.map__filter');
@@ -28,19 +28,20 @@
 
   window.download(onSuccess);
 
-  var removePins = function () {
+  var removeShownPins = function () {
 
-    for (var i = PINS.children.length - 3; i >= 0; i--) {
+    var shownPins = pins.querySelectorAll('.map__pin:not(.map__pin--main)');
+    shownPins.forEach(function (pin) {
 
-      PINS.children[PINS.children.length - 1].remove();
-    }
+      pin.remove();
+    });
   };
 
   var housingTypeSelectChangeHandler = function () {
 
     var filtered = window.filtration.filterHousingType(advertisements);
 
-    removePins();
+    removeShownPins();
 
     showPins(window.util.getLimitedSizeArray(filtered, DISPLAY_PINS_LIMIT));
   };
@@ -50,10 +51,10 @@
   var showPins = function (data) {
 
     for (var i = 0; i < data.length; i++) {
-      FRAGMENT.appendChild(window.pin.createPin(data[i]));
+      fragment.appendChild(window.pin.createPin(data[i]));
     }
 
-    PINS.appendChild(FRAGMENT);
+    pins.appendChild(fragment);
   };
 
   var toggleElementsListState = function (elementsList) {

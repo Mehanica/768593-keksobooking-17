@@ -1,53 +1,65 @@
 'use strict';
 
 (function () {
+
+  var TYPE_PRICE = {
+    'flat': '1000',
+    'bungalo': '0',
+    'house': '5000',
+    'palace': '10000'
+  };
+
   var selectTypeOfHousing = window.map.form.querySelector('#type');
   var priceField = window.map.form.querySelector('#price');
 
-  var optionChangeHandler = function () {
+  var selectTypeOfHousingChangeHandler = function () {
 
-    if (selectTypeOfHousing.children[0].selected) {
-      priceField.min = '0';
-      priceField.placeholder = '0';
-    } else if (selectTypeOfHousing.children[1].selected) {
-      priceField.min = '1000';
-      priceField.placeholder = '1000';
-    } else if (selectTypeOfHousing.children[2].selected) {
-      priceField.min = '5000';
-      priceField.placeholder = '5000';
-    } else if (selectTypeOfHousing.children[3].selected) {
-      priceField.min = '10000';
-      priceField.placeholder = '10000';
+    var minPrice = TYPE_PRICE[selectTypeOfHousing.value];
+    priceField.min = minPrice;
+    priceField.value = minPrice;
+    priceField.placeholder = minPrice;
+  };
+
+  selectTypeOfHousing.addEventListener('change', selectTypeOfHousingChangeHandler);
+
+  var ROOMS_CAPACITY = {
+    '1': ['1'],
+    '2': ['2', '1'],
+    '3': ['3', '2', '1'],
+    '100': [0]
+  };
+
+  var selectRoomNumber = document.querySelector('#room_number');
+  var selectCapacity = document.querySelector('#capacity');
+
+  var selectRoomNumberChangeHandler = function () {
+
+    if (selectCapacity.options.length > 0) {
+      [].forEach.call(selectCapacity.options, function (item) {
+
+        item.selected = (ROOMS_CAPACITY[selectRoomNumber.value][0] === item.value) ? true : false;
+        item.hidden = (ROOMS_CAPACITY[selectRoomNumber.value].indexOf(item.value) >= 0) ? false : true;
+      });
     }
   };
 
-  selectTypeOfHousing.addEventListener('change', optionChangeHandler);
+  selectRoomNumber.addEventListener('change', selectRoomNumberChangeHandler);
+
+  selectRoomNumberChangeHandler();
 
   var selectTimein = window.map.form.querySelector('#timein');
   var selectTimeout = window.map.form.querySelector('#timeout');
 
   var selectTimeinChangeHandler = function () {
 
-    if (selectTimein.children[0].selected) {
-      selectTimeout.children[0].selected = true;
-    } else if (selectTimein.children[1].selected) {
-      selectTimeout.children[1].selected = true;
-    } else if (selectTimein.children[2].selected) {
-      selectTimeout.children[2].selected = true;
-    }
+    selectTimeout.value = selectTimein.value;
   };
 
   selectTimein.addEventListener('change', selectTimeinChangeHandler);
 
   var selectTimeoutChangeHandler = function () {
 
-    if (selectTimeout.children[0].selected) {
-      selectTimein.children[0].selected = true;
-    } else if (selectTimeout.children[1].selected) {
-      selectTimein.children[1].selected = true;
-    } else if (selectTimeout.children[2].selected) {
-      selectTimein.children[2].selected = true;
-    }
+    selectTimein.value = selectTimeout.value;
   };
 
   selectTimeout.addEventListener('change', selectTimeoutChangeHandler);
