@@ -35,20 +35,22 @@
     var photosContainer = item.querySelector('.popup__photos');
     var photos = advertisement.offer.photos;
     var photo = photosContainer.children[0];
+    var ROOM_NOUNS = ['комата', 'комнаты', 'комнат'];
+    var GUEST_NOUNS = ['гостя', 'гостей'];
 
     photosContainer.innerHTML = '';
 
     getFeatures(advertisement, featuresElements);
     renderPhoto(photos, photosContainer, photo);
 
-    item.children[0].src = advertisement.author.avatar;
-    item.children[2].innerHTML = advertisement.offer.title;
-    item.children[3].innerHTML = advertisement.offer.address;
-    item.children[4].innerHTML = advertisement.offer.price + '&#x20bd;/ночь';
-    item.children[5].innerHTML = advertisement.offer.type;
-    item.children[6].innerHTML = advertisement.offer.rooms + ' комнаты для ' + advertisement.offer.guests + ' гостей';
-    item.children[7].innerHTML = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;
-    item.children[9].innerHTML = advertisement.offer.description;
+    item.querySelector('.popup__avatar').src = advertisement.author.avatar;
+    item.querySelector('.popup__title').textContent = advertisement.offer.title;
+    item.querySelector('.popup__text--address').textContent = advertisement.offer.address;
+    item.querySelector('.popup__text--price').textContent = advertisement.offer.price + '&#x20bd;/ночь';
+    item.querySelector('.popup__type').textContent = advertisement.offer.type;
+    item.querySelector('.popup__text--capacity').textContent = window.util.getCorrectNominativeCase(advertisement.offer.rooms, ROOM_NOUNS) + ' для ' + window.util.getCorrectParentCase(advertisement.offer.guests, GUEST_NOUNS);
+    item.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;
+    item.querySelector('.popup__description').textContent = advertisement.offer.description;
 
     return item;
   };
