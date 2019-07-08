@@ -50,9 +50,20 @@
 
   var showPins = function (data) {
 
-    for (var i = 0; i < data.length; i++) {
-      fragment.appendChild(window.pin.createPin(data[i]));
-    }
+    data.forEach(function (item) {
+
+      fragment.appendChild(window.pin.createPin(item));
+    });
+
+    pins.appendChild(fragment);
+  };
+
+  var showCards = function (data) {
+
+    data.forEach(function (item) {
+
+      fragment.appendChild(window.card.createCard(item));
+    });
 
     pins.appendChild(fragment);
   };
@@ -107,6 +118,7 @@
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
     showPins(window.util.getLimitedSizeArray(advertisements, DISPLAY_PINS_LIMIT));
+    showCards(advertisements);
     toggleFormElementsState();
 
     userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);
