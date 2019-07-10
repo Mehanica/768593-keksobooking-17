@@ -9,10 +9,14 @@
 
     var advertisementsCopy = advertisements.slice();
 
-    return advertisementsCopy.filter(function (it) {
+    if (housingTypeSelect.value !== 'any') {
+      return advertisementsCopy.filter(function (it) {
 
-      return it.offer.type === housingTypeSelect.value;
-    });
+        return it.offer.type === housingTypeSelect.value;
+      });
+    }
+
+    return advertisements;
   };
 
   window.filtration = {

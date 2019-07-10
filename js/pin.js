@@ -18,6 +18,7 @@
     element.tabIndex = 0;
     element.children[0].src = advertisement.author.avatar;
     element.children[0].alt = advertisement.offer.title;
+    element.children[0].style.pointerEvents = 'none';
 
     return element;
   };

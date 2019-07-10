@@ -18,8 +18,10 @@
   var form = document.querySelector('.ad-form');
   var inputAddress = form.querySelector('#address');
   var adFormElements = form.querySelectorAll('.ad-form__element');
-
+  var shownPins;
   var advertisements;
+  var currentCard;
+  var cards;
 
   var onSuccess = function (data) {
 
@@ -30,23 +32,43 @@
 
   var removeShownPins = function () {
 
-    var shownPins = pins.querySelectorAll('.map__pin:not(.map__pin--main)');
     shownPins.forEach(function (pin) {
 
       pin.remove();
     });
   };
 
+  var removeCurrentCard = function () {
+
+    if (currentCard) {
+
+      currentCard.parentNode.removeChild(currentCard);
+      currentCard = null;
+    }
+  };
+
   var housingTypeSelectChangeHandler = function () {
 
     var filtered = window.filtration.filterHousingType(advertisements);
 
+    removeCurrentCard();
     removeShownPins();
-
     showPins(window.util.getLimitedSizeArray(filtered, DISPLAY_PINS_LIMIT));
   };
 
   window.filtration.housingTypeSelect.addEventListener('change', housingTypeSelectChangeHandler);
+
+  var createCards = function (data) {
+
+    var cardsArray = [];
+
+    data.forEach(function (item) {
+
+      cardsArray.push(window.card.createCard(item));
+    });
+
+    return cardsArray;
+  };
 
   var showPins = function (data) {
 
@@ -54,18 +76,9 @@
 
       fragment.appendChild(window.pin.createPin(item));
     });
-
+    shownPins = Array.from(fragment.children);
     pins.appendChild(fragment);
-  };
-
-  var showCards = function (data) {
-
-    data.forEach(function (item) {
-
-      fragment.appendChild(window.card.createCard(item));
-    });
-
-    pins.appendChild(fragment);
+    cards = createCards(data);
   };
 
   var toggleElementsListState = function (elementsList) {
@@ -113,12 +126,42 @@
     }
   };
 
+  var buttonCloseClickHandler = function () {
+
+    removeCurrentCard();
+  };
+
+  var pinsClickHandler = function (evt) {
+
+    var target = evt.target;
+    var index = shownPins.indexOf(target);
+
+    if (currentCard !== cards[index] && index !== -1) {
+
+      removeCurrentCard();
+      currentCard = cards[index];
+      pins.appendChild(currentCard);
+      var buttonClose = currentCard.querySelector('.popup__close');
+      buttonClose.addEventListener('click', buttonCloseClickHandler);
+      document.addEventListener('keydown', function (e) {
+
+        if (e.keyCode === 27) {
+
+          removeCurrentCard();
+        }
+      });
+    }
+  };
+
+  pins.addEventListener('click', pinsClickHandler);
+
+
   var userPinfirstMousedownHandler = function () {
 
     map.classList.remove('map--faded');
     form.classList.remove('ad-form--disabled');
     showPins(window.util.getLimitedSizeArray(advertisements, DISPLAY_PINS_LIMIT));
-    showCards(advertisements);
+    pins.addEventListener('click', pinsClickHandler);
     toggleFormElementsState();
 
     userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);

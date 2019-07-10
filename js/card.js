@@ -46,7 +46,7 @@
     item.querySelector('.popup__avatar').src = advertisement.author.avatar;
     item.querySelector('.popup__title').textContent = advertisement.offer.title;
     item.querySelector('.popup__text--address').textContent = advertisement.offer.address;
-    item.querySelector('.popup__text--price').textContent = advertisement.offer.price + '&#x20bd;/ночь';
+    item.querySelector('.popup__text--price').textContent = advertisement.offer.price + '₽/ночь';
     item.querySelector('.popup__type').textContent = advertisement.offer.type;
     item.querySelector('.popup__text--capacity').textContent = window.util.getCorrectNominativeCase(advertisement.offer.rooms, ROOM_NOUNS) + ' для ' + window.util.getCorrectParentCase(advertisement.offer.guests, GUEST_NOUNS);
     item.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;
