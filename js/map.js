@@ -7,98 +7,6 @@
     y: 84
   };
 
-  var DISPLAY_PINS_LIMIT = 5;
-
-  var map = document.querySelector('.map');
-  var pins = map.querySelector('.map__pins');
-  var fragment = document.createDocumentFragment();
-  var userPin = map.querySelector('.map__pin--main');
-  var filtersForm = document.querySelector('.map__filters');
-  var mapFilters = filtersForm.querySelectorAll('.map__filter');
-  var form = document.querySelector('.ad-form');
-  var inputAddress = form.querySelector('#address');
-  var adFormElements = form.querySelectorAll('.ad-form__element');
-  var shownPins;
-  var advertisements;
-  var currentCard;
-  var cards;
-
-  var onSuccess = function (data) {
-
-    advertisements = data;
-  };
-
-  window.download(onSuccess);
-
-  var removeShownPins = function () {
-
-    shownPins.forEach(function (pin) {
-
-      pin.remove();
-    });
-  };
-
-  var removeCurrentCard = function () {
-
-    if (currentCard) {
-
-      currentCard.parentNode.removeChild(currentCard);
-      currentCard = null;
-    }
-  };
-
-  var housingTypeSelectChangeHandler = function () {
-
-    var filtered = window.filtration.filterHousingType(advertisements);
-
-    removeCurrentCard();
-    removeShownPins();
-    showPins(window.util.getLimitedSizeArray(filtered, DISPLAY_PINS_LIMIT));
-  };
-
-  window.filtration.housingTypeSelect.addEventListener('change', housingTypeSelectChangeHandler);
-
-  var createCards = function (data) {
-
-    var cardsArray = [];
-
-    data.forEach(function (item) {
-
-      cardsArray.push(window.card.createCard(item));
-    });
-
-    return cardsArray;
-  };
-
-  var showPins = function (data) {
-
-    data.forEach(function (item) {
-
-      fragment.appendChild(window.pin.createPin(item));
-    });
-    shownPins = Array.from(fragment.children);
-    pins.appendChild(fragment);
-    cards = createCards(data);
-  };
-
-  var toggleElementsListState = function (elementsList) {
-
-    for (var i = 0; i < elementsList.length; i++) {
-      elementsList[i].disabled = !elementsList[i].disabled;
-    }
-  };
-
-  var toggleFormElementsState = function () {
-
-    toggleElementsListState(mapFilters);
-    toggleElementsListState(adFormElements);
-    toggleElementsListState(filtersForm.children);
-  };
-
-  toggleFormElementsState();
-
-  var MAP_WIDTH = 1200;
-  var USER_PIN_WIDTH = 62;
   var locationBorderX = {
     min: 0,
     max: MAP_WIDTH - USER_PIN_WIDTH
@@ -109,14 +17,48 @@
     max: 630
   };
 
+  var DISPLAY_PINS_LIMIT = 5;
+  var map = document.querySelector('.map');
+  var mapPins = map.querySelector('.map__pins');
+  var fragment = document.createDocumentFragment();
+  var userPin = map.querySelector('.map__pin--main');
+  var inputAddress = document.querySelector('#address');
+  var advertisements = [];
+  var MAP_WIDTH = 1200;
+  var USER_PIN_WIDTH = 62;
+
+  var onSuccess = function (data) {
+    advertisements = data.slice();
+  };
+
+  window.download(onSuccess);
+
+  var removePins = function () {
+    var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    pins.forEach(function (pin) {
+      mapPins.removeChild(pin);
+    });
+  };
+
+  var showPins = function (data) {
+    removePins();
+    data.forEach(function (item) {
+      fragment.appendChild(window.pin.create(item));
+    });
+    mapPins.appendChild(fragment);
+  };
+
+  window.form.toggleFormElementsState();
+
   var calcLocationBorder = function (x, y) {
 
     if (y < locationBorderY.min) {
-
       userPin.style.top = locationBorderY.min + 'px';
-    } else if (y > locationBorderY.max) {
 
+    } else if (y > locationBorderY.max) {
       userPin.style.top = locationBorderY.max + 'px';
+
     } else if (x < locationBorderX.min) {
 
       userPin.style.left = locationBorderX.min + 'px';
@@ -126,52 +68,23 @@
     }
   };
 
-  var buttonCloseClickHandler = function () {
-
-    removeCurrentCard();
+  var onEscKeyDown = function () {
+    window.card.remove();
   };
-
-  var pinsClickHandler = function (evt) {
-
-    var target = evt.target;
-    var index = shownPins.indexOf(target);
-
-    if (currentCard !== cards[index] && index !== -1) {
-
-      removeCurrentCard();
-      currentCard = cards[index];
-      pins.appendChild(currentCard);
-      var buttonClose = currentCard.querySelector('.popup__close');
-      buttonClose.addEventListener('click', buttonCloseClickHandler);
-      document.addEventListener('keydown', function (e) {
-
-        if (e.keyCode === 27) {
-
-          removeCurrentCard();
-        }
-      });
-    }
-  };
-
-  pins.addEventListener('click', pinsClickHandler);
-
 
   var userPinfirstMousedownHandler = function () {
-
     map.classList.remove('map--faded');
-    form.classList.remove('ad-form--disabled');
-    showPins(window.util.getLimitedSizeArray(advertisements, DISPLAY_PINS_LIMIT));
-    pins.addEventListener('click', pinsClickHandler);
-    toggleFormElementsState();
-
+    window.form.formElement.classList.remove('ad-form--disabled');
+    showPins(advertisements.slice(0, DISPLAY_PINS_LIMIT));
+    window.form.toggleFormElementsState();
     userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);
+    document.addEventListener('keydown', onEscKeyDown);
   };
 
   userPin.addEventListener('mousedown', userPinfirstMousedownHandler);
 
   var userPinMouseDownHandler = function (evt) {
     evt.preventDefault();
-
 
     var startCoordinates = {
       x: evt.clientX,
@@ -199,13 +112,11 @@
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
       inputAddress.value = getUserPinLocation();
-
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
     };
 
     var getUserPinLocation = function () {
-
       return parseInt(userPin.style.left, 10) + USER_PIN_OFFSET.x + ', ' + (parseInt(userPin.style.top, 10) + USER_PIN_OFFSET.y);
     };
 
@@ -216,7 +127,13 @@
   userPin.addEventListener('mousedown', userPinMouseDownHandler);
 
   window.map = {
-    form: form,
-    advertisements: advertisements
+    DISPLAY_PINS_LIMIT: DISPLAY_PINS_LIMIT,
+    element: map,
+    advertisements: advertisements,
+    render: showPins,
+    remove: removePins,
+    data: function () {
+      return advertisements;
+    }
   };
 })();

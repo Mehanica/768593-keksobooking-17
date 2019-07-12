@@ -5,19 +5,21 @@
   var mapFiltersForm = document.querySelector('.map__filters');
   var housingTypeSelect = mapFiltersForm.querySelector('#housing-type');
 
-  var filterHousingType = function (advertisements) {
+  var filterHousingType = function () {
+    window.card.remove();
 
-    var advertisementsCopy = advertisements.slice();
+    var filteredPins = window.map.data().slice();
 
     if (housingTypeSelect.value !== 'any') {
-      return advertisementsCopy.filter(function (it) {
-
+      filteredPins = filteredPins.filter(function (it) {
         return it.offer.type === housingTypeSelect.value;
       });
     }
 
-    return advertisements;
+    window.map.render(filteredPins.slice(0, window.map.DISPLAY_PINS_LIMIT));
   };
+
+  mapFiltersForm.addEventListener('change', filterHousingType);
 
   window.filtration = {
     filterHousingType: filterHousingType,
