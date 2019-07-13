@@ -83,9 +83,16 @@
   var formElementSuccessHandler = function () {
     var popupSuccess = document.querySelector('#success');
     var element = popupSuccess.content.cloneNode(true);
-    var main = document.querySelector('main');
+    var elementContent = element.children[0];
 
-    main.appendChild(element);
+    window.data.main.appendChild(element);
+
+    var messageRemoveHandler = function () {
+      elementContent.remove();
+    };
+
+    document.addEventListener('keydown', messageRemoveHandler);
+    document.addEventListener('click', messageRemoveHandler);
 
     formElement.reset();
     toggleFormElementsState();
@@ -93,10 +100,22 @@
     window.card.remove();
     window.pin.resetUserPinStartCoordinates();
     inputAddress.value = window.pin.getUserPinLocation();
+    window.pin.userPin.addEventListener('mousedown', window.map.userPinfirstMousedownHandler);
   };
 
   var formElementErrorHandler = function () {
+    var popupError = document.querySelector('#error');
+    var element = popupError.content.cloneNode(true);
+    var elementContent = element.children[0];
 
+    window.data.main.appendChild(element);
+
+    var messageRemoveHandler = function () {
+      elementContent.remove();
+    };
+
+    document.addEventListener('keydown', messageRemoveHandler);
+    document.addEventListener('click', messageRemoveHandler);
   };
 
   var formElementSubmitHandler = function (evt) {

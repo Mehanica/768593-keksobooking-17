@@ -123,6 +123,7 @@
     DISPLAY_PINS_LIMIT: DISPLAY_PINS_LIMIT,
     element: map,
     advertisements: advertisements,
+    userPinfirstMousedownHandler: userPinfirstMousedownHandler,
     render: showPins,
     remove: removePins,
     data: function () {
