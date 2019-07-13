@@ -3,6 +3,7 @@
 (function () {
 
   var URL = 'https://js.dump.academy/keksobooking/data';
+  var URL_SEND = 'https://js.dump.academy/keksobooking';
   var SUCCESSFUL_STATUS = 200;
 
   var onError = function () {
@@ -28,6 +29,18 @@
       }
     });
     xhr.send();
+  };
+
+  window.upload = function (data, formElementSuccessHandler, formElementErrorHandler) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    xhr.addEventListener('load', function () {
+      formElementSuccessHandler(xhr.response);
+    });
+
+    xhr.open('POST', URL_SEND);
+    xhr.send(data);
   };
 
 })();
