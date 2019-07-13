@@ -87,11 +87,17 @@
 
     window.data.main.appendChild(element);
 
+    var EscKeyDownHandler = function (evt) {
+      if (evt.keyCode === 27) {
+        elementContent.remove();
+      }
+    };
+
     var messageRemoveHandler = function () {
       elementContent.remove();
     };
 
-    document.addEventListener('keydown', messageRemoveHandler);
+    document.addEventListener('keydown', EscKeyDownHandler);
     document.addEventListener('click', messageRemoveHandler);
 
     formElement.reset();
@@ -110,11 +116,17 @@
 
     window.data.main.appendChild(element);
 
+    var EscKeyDownHandler = function (evt) {
+      if (evt.keyCode === 27) {
+        elementContent.remove();
+      }
+    };
+
     var messageRemoveHandler = function () {
       elementContent.remove();
     };
 
-    document.addEventListener('keydown', messageRemoveHandler);
+    document.addEventListener('keydown', EscKeyDownHandler);
     document.addEventListener('click', messageRemoveHandler);
   };
 
