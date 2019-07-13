@@ -2,11 +2,6 @@
 
 (function () {
 
-  var USER_PIN_OFFSET = {
-    x: 31,
-    y: 84
-  };
-
   var locationBorderX = {
     min: 0,
     max: MAP_WIDTH - USER_PIN_WIDTH
@@ -21,11 +16,13 @@
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
-  var userPin = map.querySelector('.map__pin--main');
-  var inputAddress = document.querySelector('#address');
   var advertisements = [];
   var MAP_WIDTH = 1200;
   var USER_PIN_WIDTH = 62;
+
+  // map.addEventListener('click', function () {
+  //   window.form.toggleFormElementsState();
+  // });
 
   var onSuccess = function (data) {
     advertisements = data.slice();
@@ -54,17 +51,17 @@
   var calcLocationBorder = function (x, y) {
 
     if (y < locationBorderY.min) {
-      userPin.style.top = locationBorderY.min + 'px';
+      window.pin.userPin.style.top = locationBorderY.min + 'px';
 
     } else if (y > locationBorderY.max) {
-      userPin.style.top = locationBorderY.max + 'px';
+      window.pin.userPin.style.top = locationBorderY.max + 'px';
 
     } else if (x < locationBorderX.min) {
 
-      userPin.style.left = locationBorderX.min + 'px';
+      window.pin.userPin.style.left = locationBorderX.min + 'px';
     } else if (x > locationBorderX.max) {
 
-      userPin.style.left = locationBorderX.max + 'px';
+      window.pin.userPin.style.left = locationBorderX.max + 'px';
     }
   };
 
@@ -77,11 +74,11 @@
     window.form.formElement.classList.remove('ad-form--disabled');
     showPins(advertisements.slice(0, DISPLAY_PINS_LIMIT));
     window.form.toggleFormElementsState();
-    userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);
+    window.pin.userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);
     document.addEventListener('keydown', onEscKeyDown);
   };
 
-  userPin.addEventListener('mousedown', userPinfirstMousedownHandler);
+  window.pin.userPin.addEventListener('mousedown', userPinfirstMousedownHandler);
 
   var userPinMouseDownHandler = function (evt) {
     evt.preventDefault();
@@ -104,27 +101,23 @@
         y: moveEvt.clientY
       };
 
-      userPin.style.top = (userPin.offsetTop - shift.y) + 'px';
-      userPin.style.left = (userPin.offsetLeft - shift.x) + 'px';
-      calcLocationBorder(userPin.offsetLeft - shift.x, userPin.offsetTop - shift.y);
+      window.pin.userPin.style.top = (window.pin.userPin.offsetTop - shift.y) + 'px';
+      window.pin.userPin.style.left = (window.pin.userPin.offsetLeft - shift.x) + 'px';
+      calcLocationBorder(window.pin.userPin.offsetLeft - shift.x, window.pin.userPin.offsetTop - shift.y);
     };
 
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
-      inputAddress.value = getUserPinLocation();
+      window.form.inputAddress.value = window.pin.getUserPinLocation();
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
-    };
-
-    var getUserPinLocation = function () {
-      return parseInt(userPin.style.left, 10) + USER_PIN_OFFSET.x + ', ' + (parseInt(userPin.style.top, 10) + USER_PIN_OFFSET.y);
     };
 
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
   };
 
-  userPin.addEventListener('mousedown', userPinMouseDownHandler);
+  window.pin.userPin.addEventListener('mousedown', userPinMouseDownHandler);
 
   window.map = {
     DISPLAY_PINS_LIMIT: DISPLAY_PINS_LIMIT,

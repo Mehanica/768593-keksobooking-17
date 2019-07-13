@@ -27,6 +27,7 @@
   var selectTimein = formElement.querySelector('#timein');
   var selectTimeout = formElement.querySelector('#timeout');
   var titleField = formElement.querySelector('#title');
+  var inputAddress = document.querySelector('#address');
 
 
   var toggleElementsListState = function (elementsList) {
@@ -79,6 +80,32 @@
 
   selectTimeout.addEventListener('change', selectTimeoutChangeHandler);
 
+  var formElementSuccessHandler = function () {
+    var popupSuccess = document.querySelector('#success');
+    var element = popupSuccess.content.cloneNode(true);
+    var main = document.querySelector('main');
+
+    main.appendChild(element);
+
+    formElement.reset();
+    toggleFormElementsState();
+    window.map.remove();
+    window.card.remove();
+    window.pin.resetUserPinStartCoordinates();
+    inputAddress.value = window.pin.getUserPinLocation();
+  };
+
+  var formElementErrorHandler = function () {
+
+  };
+
+  var formElementSubmitHandler = function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(formElement), formElementSuccessHandler, formElementErrorHandler);
+  };
+
+  formElement.addEventListener('submit', formElementSubmitHandler);
+
   var inputInvalidHadler = function (evt) {
     var target = evt.target;
     target.style.outline = '4px solid red';
@@ -93,6 +120,7 @@
   });
 
   window.form = {
+    inputAddress: inputAddress,
     formElement: formElement,
     toggleFormElementsState: toggleFormElementsState
   };

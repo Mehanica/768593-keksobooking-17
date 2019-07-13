@@ -7,7 +7,18 @@
     y: 70
   };
 
+  var USER_PIN_OFFSET = {
+    x: 31,
+    y: 84
+  };
+
+  var userPinStartCoordinates = {
+    x: 570,
+    y: 375
+  };
+
   var TEMPLATE = document.querySelector('#pin').content.querySelector('button');
+  var userPin = document.querySelector('.map__pin--main');
 
   var onPinClick = function (data) {
     window.card.create(data);
@@ -29,7 +40,21 @@
     return element;
   };
 
+  var getUserPinLocation = function () {
+    return parseInt(userPin.style.left, 10) + USER_PIN_OFFSET.x + ', ' + (parseInt(userPin.style.top, 10) + USER_PIN_OFFSET.y);
+  };
+
+  var resetUserPinStartCoordinates = function () {
+    userPin.style.top = userPinStartCoordinates.y + 'px';
+    userPin.style.left = userPinStartCoordinates.x + 'px';
+  };
+
+
   window.pin = {
-    create: createPin
+    userPinStartCoordinates: userPinStartCoordinates,
+    getUserPinLocation: getUserPinLocation,
+    userPin: userPin,
+    create: createPin,
+    resetUserPinStartCoordinates: resetUserPinStartCoordinates
   };
 })();
