@@ -9,12 +9,42 @@
     'palace': '10000'
   };
 
-  var selectTypeOfHousing = window.map.form.querySelector('#type');
-  var priceField = window.map.form.querySelector('#price');
+  var ROOMS_CAPACITY = {
+    '1': ['1'],
+    '2': ['2', '1'],
+    '3': ['3', '2', '1'],
+    '100': ['0']
+  };
+
+  var formElement = document.querySelector('.ad-form');
+  var filtersForm = document.querySelector('.map__filters');
+  var mapFilters = filtersForm.querySelectorAll('.map__filter');
+  var adFormElements = formElement.querySelectorAll('.ad-form__element');
+  var selectTypeOfHousing = formElement.querySelector('#type');
+  var priceField = formElement.querySelector('#price');
+  var selectRoomNumber = document.querySelector('#room_number');
+  var selectCapacity = document.querySelector('#capacity');
+  var selectTimein = formElement.querySelector('#timein');
+  var selectTimeout = formElement.querySelector('#timeout');
+  var titleField = formElement.querySelector('#title');
+
+
+  var toggleElementsListState = function (elementsList) {
+
+    for (var i = 0; i < elementsList.length; i++) {
+      elementsList[i].disabled = !elementsList[i].disabled;
+    }
+  };
+
+  var toggleFormElementsState = function () {
+    toggleElementsListState(mapFilters);
+    toggleElementsListState(adFormElements);
+    toggleElementsListState(filtersForm.children);
+  };
 
   var selectTypeOfHousingChangeHandler = function () {
-
     var minPrice = TYPE_PRICE[selectTypeOfHousing.value];
+
     priceField.min = minPrice;
     priceField.value = minPrice;
     priceField.placeholder = minPrice;
@@ -22,23 +52,13 @@
 
   selectTypeOfHousing.addEventListener('change', selectTypeOfHousingChangeHandler);
 
-  var ROOMS_CAPACITY = {
-    '1': ['1'],
-    '2': ['2', '1'],
-    '3': ['3', '2', '1'],
-    '100': [0]
-  };
-
-  var selectRoomNumber = document.querySelector('#room_number');
-  var selectCapacity = document.querySelector('#capacity');
-
   var selectRoomNumberChangeHandler = function () {
 
     if (selectCapacity.options.length > 0) {
       [].forEach.call(selectCapacity.options, function (item) {
-
-        item.selected = (ROOMS_CAPACITY[selectRoomNumber.value][0] === item.value) ? true : false;
-        item.hidden = (ROOMS_CAPACITY[selectRoomNumber.value].indexOf(item.value) >= 0) ? false : true;
+        item.selected = ROOMS_CAPACITY[selectRoomNumber.value][0] === item.value;
+        item.hidden = !(ROOMS_CAPACITY[selectRoomNumber.value].indexOf(item.value) >= 0);
+        item.disabled = !(ROOMS_CAPACITY[selectRoomNumber.value].indexOf(item.value) >= 0);
       });
     }
   };
@@ -47,24 +67,17 @@
 
   selectRoomNumberChangeHandler();
 
-  var selectTimein = window.map.form.querySelector('#timein');
-  var selectTimeout = window.map.form.querySelector('#timeout');
-
   var selectTimeinChangeHandler = function () {
-
     selectTimeout.value = selectTimein.value;
   };
 
   selectTimein.addEventListener('change', selectTimeinChangeHandler);
 
   var selectTimeoutChangeHandler = function () {
-
     selectTimein.value = selectTimeout.value;
   };
 
   selectTimeout.addEventListener('change', selectTimeoutChangeHandler);
-
-  var titleField = window.map.form.querySelector('#title');
 
   var inputInvalidHadler = function (evt) {
     var target = evt.target;
@@ -72,12 +85,15 @@
   };
 
   titleField.addEventListener('invalid', function (evt) {
-
     inputInvalidHadler(evt);
   });
 
   priceField.addEventListener('invalid', function (evt) {
-
     inputInvalidHadler(evt);
   });
+
+  window.form = {
+    formElement: formElement,
+    toggleFormElementsState: toggleFormElementsState
+  };
 })();

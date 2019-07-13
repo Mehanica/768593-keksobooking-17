@@ -6,7 +6,6 @@
   var SUCCESSFUL_STATUS = 200;
 
   var onError = function () {
-
     var popupError = document.querySelector('#error');
     var element = popupError.content.cloneNode(true);
     var main = document.querySelector('main');
@@ -15,10 +14,9 @@
   };
 
   window.download = function (onSuccess) {
-
     var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
 
+    xhr.responseType = 'json';
     xhr.open('GET', URL);
 
     xhr.addEventListener('load', function () {
@@ -29,7 +27,6 @@
         onError();
       }
     });
-
     xhr.send();
   };
 
