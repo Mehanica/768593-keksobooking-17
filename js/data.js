@@ -31,7 +31,7 @@
     xhr.send();
   };
 
-  window.upload = function (data, formElementSuccessHandler, formElementErrorHandler) {
+  window.upload = function (data, formElementSuccessHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
