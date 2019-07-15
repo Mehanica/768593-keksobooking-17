@@ -39,32 +39,80 @@
     photosContainer.innerHTML = '';
 
     getFeatures(advertisement, featuresElements);
-    renderPhoto(photos, photosContainer, photo);
+    if (featuresElements.length === 0) {
+      var featuresList = SAMPLE.querySelector('.popup__features');
+      featuresList.remove();
+    }
 
-    item.querySelector('.popup__avatar').src = advertisement.author.avatar;
-    item.querySelector('.popup__title').textContent = advertisement.offer.title;
-    item.querySelector('.popup__text--address').textContent = advertisement.offer.address;
-    item.querySelector('.popup__text--price').textContent = advertisement.offer.price + '₽/ночь';
-    item.querySelector('.popup__type').textContent = advertisement.offer.type;
-    item.querySelector('.popup__text--capacity').textContent = window.util.getCorrectNominativeCase(advertisement.offer.rooms, ROOM_NOUNS) + ' для ' + window.util.getCorrectParentCase(advertisement.offer.guests, GUEST_NOUNS);
-    item.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;
-    item.querySelector('.popup__description').textContent = advertisement.offer.description;
+    renderPhoto(photos, photosContainer, photo);
+    if (photos.length === 0) {
+      photosContainer.remove();
+    }
+
+    if (!advertisement.author.avatar) {
+      item.querySelector('.popup__avatar').remove();
+    } else {
+      item.querySelector('.popup__avatar').src = advertisement.author.avatar;
+    }
+
+    if (!advertisement.offer.title) {
+      item.querySelector('.popup__title').remove();
+    } else {
+      item.querySelector('.popup__title').textContent = advertisement.offer.title;
+    }
+
+    if (!advertisement.offer.address) {
+      item.querySelector('.popup__text--address').remove();
+    } else {
+      item.querySelector('.popup__text--address').textContent = advertisement.offer.address;
+    }
+
+    if (!advertisement.offer.price) {
+      item.querySelector('.popup__text--price').remove();
+    } else {
+      item.querySelector('.popup__text--price').textContent = advertisement.offer.price + '₽/ночь';
+    }
+
+    if (!advertisement.offer.type) {
+      item.querySelector('.popup__type').remove();
+    } else {
+      item.querySelector('.popup__type').textContent = advertisement.offer.type;
+    }
+
+    if (!advertisement.offer.rooms && advertisement.offer.guests) {
+      item.querySelector('.popup__text--capacity').remove();
+    } else {
+      item.querySelector('.popup__text--capacity').textContent = window.util.getCorrectNominativeCase(advertisement.offer.rooms, ROOM_NOUNS) + ' для ' + window.util.getCorrectParentCase(advertisement.offer.guests, GUEST_NOUNS);
+    }
+
+    if (!advertisement.offer.checkin) {
+      item.querySelector('.popup__text--time').remove();
+    } else {
+      item.querySelector('.popup__text--time').textContent = 'Заезд после ' + advertisement.offer.checkin + ', выезд до ' + advertisement.offer.checkout;
+    }
+
+    if (!advertisement.offer.description) {
+      item.querySelector('.popup__description').remove();
+    } else {
+      item.querySelector('.popup__description').textContent = advertisement.offer.description;
+    }
+
     item.querySelector('.popup__close').addEventListener('click', buttonCloseClickHandler);
 
     return item;
   };
 
   var removeCard = function () {
-    var popup = window.map.element.querySelector('.popup');
+    var popup = window.form.mapElement.querySelector('.popup');
 
     if (popup) {
-      window.map.element.removeChild(popup);
+      window.form.mapElement.removeChild(popup);
     }
   };
 
   var createCard = function (data) {
     removeCard();
-    window.map.element.appendChild(createCardClone(data));
+    window.form.mapElement.appendChild(createCardClone(data));
   };
 
   window.card = {

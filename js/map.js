@@ -13,25 +13,29 @@
   };
 
   var DISPLAY_PINS_LIMIT = 5;
-  var map = document.querySelector('.map');
-  var mapPins = map.querySelector('.map__pins');
+
+  var mapPins = window.form.mapElement.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
   var advertisements = [];
   var MAP_WIDTH = 1200;
   var USER_PIN_WIDTH = 62;
 
-  // map.addEventListener('click', function () {
-  //   window.form.toggleFormElementsState();
-  // });
+  var activatePage = function () {
+    window.form.mapElement.classList.remove('map--faded');
+    window.form.formElement.classList.remove('ad-form--disabled');
+    showPins(advertisements.slice(0, DISPLAY_PINS_LIMIT));
+    window.form.toggleFormElementsState();
+    window.pin.userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);
+    document.addEventListener('keydown', onEscKeyDown);
+  };
 
   var onSuccess = function (data) {
     advertisements = data.slice();
+    activatePage();
   };
 
-  window.download(onSuccess);
-
   var removePins = function () {
-    var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var pins = window.form.mapElement.querySelectorAll('.map__pin:not(.map__pin--main)');
 
     pins.forEach(function (pin) {
       mapPins.removeChild(pin);
@@ -70,12 +74,11 @@
   };
 
   var userPinfirstMousedownHandler = function () {
-    map.classList.remove('map--faded');
-    window.form.formElement.classList.remove('ad-form--disabled');
-    showPins(advertisements.slice(0, DISPLAY_PINS_LIMIT));
-    window.form.toggleFormElementsState();
-    window.pin.userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);
-    document.addEventListener('keydown', onEscKeyDown);
+    if (advertisements.length === 0) {
+      window.download(onSuccess);
+    } else {
+      activatePage();
+    }
   };
 
   window.pin.userPin.addEventListener('mousedown', userPinfirstMousedownHandler);
@@ -121,8 +124,8 @@
 
   window.map = {
     DISPLAY_PINS_LIMIT: DISPLAY_PINS_LIMIT,
-    element: map,
     advertisements: advertisements,
+    userPinfirstMousedownHandler: userPinfirstMousedownHandler,
     render: showPins,
     remove: removePins,
     data: function () {

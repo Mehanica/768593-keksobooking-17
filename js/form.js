@@ -17,7 +17,8 @@
   };
 
   var formElement = document.querySelector('.ad-form');
-  var filtersForm = document.querySelector('.map__filters');
+  var map = document.querySelector('.map');
+  var filtersForm = map.querySelector('.map__filters');
   var mapFilters = filtersForm.querySelectorAll('.map__filter');
   var adFormElements = formElement.querySelectorAll('.ad-form__element');
   var selectTypeOfHousing = formElement.querySelector('#type');
@@ -47,7 +48,6 @@
     var minPrice = TYPE_PRICE[selectTypeOfHousing.value];
 
     priceField.min = minPrice;
-    priceField.value = minPrice;
     priceField.placeholder = minPrice;
   };
 
@@ -83,20 +83,52 @@
   var formElementSuccessHandler = function () {
     var popupSuccess = document.querySelector('#success');
     var element = popupSuccess.content.cloneNode(true);
-    var main = document.querySelector('main');
+    var elementContent = element.children[0];
 
-    main.appendChild(element);
+    window.data.main.appendChild(element);
 
+    var EscKeyDownHandler = function (evt) {
+      if (evt.keyCode === 27) {
+        elementContent.remove();
+      }
+    };
+
+    var messageRemoveHandler = function () {
+      elementContent.remove();
+    };
+
+    document.addEventListener('keydown', EscKeyDownHandler);
+    document.addEventListener('click', messageRemoveHandler);
+
+    map.classList.add('map--faded');
+    formElement.classList.add('ad-form--disabled');
     formElement.reset();
     toggleFormElementsState();
     window.map.remove();
     window.card.remove();
     window.pin.resetUserPinStartCoordinates();
     inputAddress.value = window.pin.getUserPinLocation();
+    window.pin.userPin.addEventListener('mousedown', window.map.userPinfirstMousedownHandler);
   };
 
   var formElementErrorHandler = function () {
+    var element = window.data.popupError.content.cloneNode(true);
+    var elementContent = element.children[0];
 
+    window.data.main.appendChild(element);
+
+    var EscKeyDownHandler = function (evt) {
+      if (evt.keyCode === 27) {
+        elementContent.remove();
+      }
+    };
+
+    var messageRemoveHandler = function () {
+      elementContent.remove();
+    };
+
+    document.addEventListener('keydown', EscKeyDownHandler);
+    document.addEventListener('click', messageRemoveHandler);
   };
 
   var formElementSubmitHandler = function (evt) {
@@ -120,6 +152,7 @@
   });
 
   window.form = {
+    mapElement: map,
     inputAddress: inputAddress,
     formElement: formElement,
     toggleFormElementsState: toggleFormElementsState
