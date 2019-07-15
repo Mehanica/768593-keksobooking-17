@@ -55,16 +55,16 @@
   };
 
   var removeCard = function () {
-    var popup = window.map.element.querySelector('.popup');
+    var popup = window.form.mapElement.querySelector('.popup');
 
     if (popup) {
-      window.map.element.removeChild(popup);
+      window.form.mapElement.removeChild(popup);
     }
   };
 
   var createCard = function (data) {
     removeCard();
-    window.map.element.appendChild(createCardClone(data));
+    window.form.mapElement.appendChild(createCardClone(data));
   };
 
   window.card = {

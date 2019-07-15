@@ -7,9 +7,9 @@
   var SUCCESSFUL_STATUS = 200;
   var mainElement = document.querySelector('main');
   var XHR_TIMEOUT = 5000;
+  var popupError = document.querySelector('#error');
 
   var onError = function () {
-    var popupError = document.querySelector('#error');
     var element = popupError.content.cloneNode(true);
 
     mainElement.appendChild(element);
@@ -55,6 +55,7 @@
   };
 
   window.data = {
-    main: mainElement
+    main: mainElement,
+    popupError: popupError
   };
 })();
