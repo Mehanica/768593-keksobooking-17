@@ -16,10 +16,12 @@
     '100': ['0']
   };
 
+  var ESC_KEY_CODE = 27;
   var formElement = document.querySelector('.ad-form');
   var map = document.querySelector('.map');
   var filtersForm = map.querySelector('.map__filters');
   var mapFilters = filtersForm.querySelectorAll('.map__filter');
+  var mapFilterFeatures = filtersForm.querySelector('.map__features');
   var adFormElements = formElement.querySelectorAll('.ad-form__element');
   var selectTypeOfHousing = formElement.querySelector('#type');
   var priceField = formElement.querySelector('#price');
@@ -41,7 +43,7 @@
   var toggleFormElementsState = function () {
     toggleElementsListState(mapFilters);
     toggleElementsListState(adFormElements);
-    toggleElementsListState(filtersForm.children);
+    toggleElementsListState(mapFilterFeatures);
   };
 
   var selectTypeOfHousingChangeHandler = function () {
@@ -88,7 +90,7 @@
     window.data.main.appendChild(element);
 
     var EscKeyDownHandler = function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.keyCode === ESC_KEY_CODE) {
         elementContent.remove();
       }
     };
@@ -118,7 +120,7 @@
     window.data.main.appendChild(element);
 
     var EscKeyDownHandler = function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.keyCode === ESC_KEY_CODE) {
         elementContent.remove();
       }
     };
