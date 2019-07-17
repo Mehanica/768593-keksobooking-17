@@ -13,7 +13,6 @@
   };
 
   var DISPLAY_PINS_LIMIT = 5;
-
   var mapPins = window.form.mapElement.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
   var advertisements = [];
