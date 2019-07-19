@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var ESC_KEY_CODE = 27;
 
   var TYPE_PRICE = {
     'flat': '1000',
@@ -15,8 +16,6 @@
     '3': ['3', '2', '1'],
     '100': ['0']
   };
-
-  var ESC_KEY_CODE = 27;
 
   var map = document.querySelector('.map');
   var filtersForm = map.querySelector('.map__filters');

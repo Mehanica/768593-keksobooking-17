@@ -28,13 +28,13 @@
   };
 
   var createCardClone = function (advertisement) {
+    var ROOM_NOUNS = ['комата', 'комнаты', 'комнат'];
+    var GUEST_NOUNS = ['гостя', 'гостей'];
     var item = SAMPLE.cloneNode(true);
     var featuresElements = item.querySelectorAll('.popup__feature');
     var photosContainer = item.querySelector('.popup__photos');
     var photos = advertisement.offer.photos;
     var photo = photosContainer.children[0];
-    var ROOM_NOUNS = ['комата', 'комнаты', 'комнат'];
-    var GUEST_NOUNS = ['гостя', 'гостей'];
 
     photosContainer.innerHTML = '';
 

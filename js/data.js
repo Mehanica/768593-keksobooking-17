@@ -5,8 +5,8 @@
   var URL = 'https://js.dump.academy/keksobooking/data';
   var URL_SEND = 'https://js.dump.academy/keksobooking';
   var SUCCESSFUL_STATUS = 200;
-  var mainElement = document.querySelector('main');
   var XHR_TIMEOUT = 5000;
+  var mainElement = document.querySelector('main');
   var popupError = document.querySelector('#error');
 
   var onError = function () {
