@@ -21,7 +21,7 @@
 
   var activatePage = function () {
     window.form.mapElement.classList.remove('map--faded');
-    window.form.formElement.classList.remove('ad-form--disabled');
+    window.imagesUpload.formElement.classList.remove('ad-form--disabled');
     showPins(advertisements.slice(0, DISPLAY_PINS_LIMIT));
     window.form.toggleFormElementsState();
     window.pin.userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);

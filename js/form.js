@@ -17,19 +17,19 @@
   };
 
   var ESC_KEY_CODE = 27;
-  var formElement = document.querySelector('.ad-form');
+
   var map = document.querySelector('.map');
   var filtersForm = map.querySelector('.map__filters');
   var mapFilters = filtersForm.querySelectorAll('.map__filter');
   var mapFilterFeatures = filtersForm.querySelector('.map__features');
-  var adFormElements = formElement.querySelectorAll('.ad-form__element');
-  var selectTypeOfHousing = formElement.querySelector('#type');
-  var priceField = formElement.querySelector('#price');
+  var adFormElements = window.imagesUpload.formElement.querySelectorAll('.ad-form__element');
+  var selectTypeOfHousing = window.imagesUpload.formElement.querySelector('#type');
+  var priceField = window.imagesUpload.formElement.querySelector('#price');
   var selectRoomNumber = document.querySelector('#room_number');
   var selectCapacity = document.querySelector('#capacity');
-  var selectTimein = formElement.querySelector('#timein');
-  var selectTimeout = formElement.querySelector('#timeout');
-  var titleField = formElement.querySelector('#title');
+  var selectTimein = window.imagesUpload.formElement.querySelector('#timein');
+  var selectTimeout = window.imagesUpload.formElement.querySelector('#timeout');
+  var titleField = window.imagesUpload.formElement.querySelector('#title');
   var inputAddress = document.querySelector('#address');
 
 
@@ -103,12 +103,14 @@
     document.addEventListener('click', messageRemoveHandler);
 
     map.classList.add('map--faded');
-    formElement.classList.add('ad-form--disabled');
-    formElement.reset();
+    window.imagesUpload.formElement.classList.add('ad-form--disabled');
+    window.imagesUpload.formElement.reset();
     toggleFormElementsState();
     window.map.remove();
     window.card.remove();
     window.pin.resetUserPinStartCoordinates();
+    window.imagesUpload.resetAvatarPhoto();
+    window.imagesUpload.resetUserPhoto();
     inputAddress.value = window.pin.getUserPinLocation();
     window.pin.userPin.addEventListener('mousedown', window.map.userPinfirstMousedownHandler);
   };
@@ -135,10 +137,10 @@
 
   var formElementSubmitHandler = function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(formElement), formElementSuccessHandler, formElementErrorHandler);
+    window.upload(new FormData(window.imagesUpload.formElement), formElementSuccessHandler, formElementErrorHandler);
   };
 
-  formElement.addEventListener('submit', formElementSubmitHandler);
+  window.imagesUpload.formElement.addEventListener('submit', formElementSubmitHandler);
 
   var inputInvalidHadler = function (evt) {
     var target = evt.target;
@@ -156,7 +158,6 @@
   window.form = {
     mapElement: map,
     inputAddress: inputAddress,
-    formElement: formElement,
     toggleFormElementsState: toggleFormElementsState
   };
 })();
