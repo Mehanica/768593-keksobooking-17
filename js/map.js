@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+  var DISPLAY_PINS_LIMIT = 5;
+  var MAP_WIDTH = 1200;
+  var USER_PIN_WIDTH = 62;
 
   var locationBorderX = {
     min: 0,
@@ -12,12 +15,11 @@
     max: 630
   };
 
-  var DISPLAY_PINS_LIMIT = 5;
+
   var mapPins = window.form.mapElement.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
   var advertisements = [];
-  var MAP_WIDTH = 1200;
-  var USER_PIN_WIDTH = 62;
+
 
   var activatePage = function () {
     window.form.mapElement.classList.remove('map--faded');

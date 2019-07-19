@@ -98,25 +98,26 @@
 
   var handleDropUserPhoto = function (evt) {
     evt.dataTransfer.dropEffect = 'copy';
-    var file = evt.dataTransfer.files[0];
-    var fileName = file.name.toLowerCase();
-    var matches = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
-    });
-
-    if (matches) {
-      var reader = new FileReader();
-
-      reader.addEventListener('load', function () {
-        var image = document.createElement('img');
-        image.width = '75';
-        image.height = '70';
-        image.src = reader.result;
-
-        photoContainer.appendChild(image);
+    [].forEach.call(evt.dataTransfer.files, function (file) {
+      var fileName = file.name.toLowerCase();
+      var matches = FILE_TYPES.some(function (it) {
+        return fileName.endsWith(it);
       });
-      reader.readAsDataURL(file);
-    }
+
+      if (matches) {
+        var reader = new FileReader();
+
+        reader.addEventListener('load', function () {
+          var image = document.createElement('img');
+          image.width = '75';
+          image.height = '70';
+          image.src = reader.result;
+
+          photoContainer.appendChild(image);
+        });
+        reader.readAsDataURL(file);
+      }
+    });
   };
 
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (eventName) {
