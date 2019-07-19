@@ -3,9 +3,11 @@
 (function () {
 
   var SAMPLE = document.querySelector('#card').content.querySelector('.popup');
+  var ROOM_NOUNS = ['комата', 'комнаты', 'комнат'];
+  var GUEST_NOUNS = ['гостя', 'гостей'];
+  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
   var getFeatures = function (data, featuresElements) {
-    var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
     FEATURES.forEach(function (item, index) {
 
@@ -28,8 +30,6 @@
   };
 
   var createCardClone = function (advertisement) {
-    var ROOM_NOUNS = ['комата', 'комнаты', 'комнат'];
-    var GUEST_NOUNS = ['гостя', 'гостей'];
     var item = SAMPLE.cloneNode(true);
     var featuresElements = item.querySelectorAll('.popup__feature');
     var photosContainer = item.querySelector('.popup__photos');

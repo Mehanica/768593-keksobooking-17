@@ -3,14 +3,14 @@
 (function () {
   var ESC_KEY_CODE = 27;
 
-  var TYPE_PRICE = {
+  var TypePrice = {
     'flat': '1000',
     'bungalo': '0',
     'house': '5000',
     'palace': '10000'
   };
 
-  var ROOMS_CAPACITY = {
+  var RoomsCapacity = {
     '1': ['1'],
     '2': ['2', '1'],
     '3': ['3', '2', '1'],
@@ -31,7 +31,6 @@
   var titleField = window.imagesUpload.formElement.querySelector('#title');
   var inputAddress = document.querySelector('#address');
 
-
   var toggleElementsListState = function (elementsList) {
 
     for (var i = 0; i < elementsList.length; i++) {
@@ -43,10 +42,12 @@
     toggleElementsListState(mapFilters);
     toggleElementsListState(adFormElements);
     toggleElementsListState(mapFilterFeatures);
+    window.imagesUpload.avatarInput.disabled = !window.imagesUpload.avatarInput.disabled;
+    window.imagesUpload.photoDropeZone.disabled = !window.imagesUpload.photoDropeZone.disabled;
   };
 
   var selectTypeOfHousingChangeHandler = function () {
-    var minPrice = TYPE_PRICE[selectTypeOfHousing.value];
+    var minPrice = TypePrice[selectTypeOfHousing.value];
 
     priceField.min = minPrice;
     priceField.placeholder = minPrice;
@@ -58,9 +59,9 @@
 
     if (selectCapacity.options.length > 0) {
       [].forEach.call(selectCapacity.options, function (item) {
-        item.selected = ROOMS_CAPACITY[selectRoomNumber.value][0] === item.value;
-        item.hidden = !(ROOMS_CAPACITY[selectRoomNumber.value].indexOf(item.value) >= 0);
-        item.disabled = !(ROOMS_CAPACITY[selectRoomNumber.value].indexOf(item.value) >= 0);
+        item.selected = RoomsCapacity[selectRoomNumber.value][0] === item.value;
+        item.hidden = !(RoomsCapacity[selectRoomNumber.value].indexOf(item.value) >= 0);
+        item.disabled = !(RoomsCapacity[selectRoomNumber.value].indexOf(item.value) >= 0);
       });
     }
   };
@@ -111,6 +112,7 @@
     window.imagesUpload.resetAvatarPhoto();
     window.imagesUpload.resetUserPhoto();
     inputAddress.value = window.pin.getUserPinLocation();
+    window.imagesUpload.disablePucturesDropZones();
     window.pin.userPin.addEventListener('mousedown', window.map.userPinfirstMousedownHandler);
   };
 

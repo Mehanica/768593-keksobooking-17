@@ -15,15 +15,14 @@
     max: 630
   };
 
-
   var mapPins = window.form.mapElement.querySelector('.map__pins');
   var fragment = document.createDocumentFragment();
   var advertisements = [];
 
-
   var activatePage = function () {
     window.form.mapElement.classList.remove('map--faded');
     window.imagesUpload.formElement.classList.remove('ad-form--disabled');
+    window.imagesUpload.enablePicturesDropZones();
     showPins(advertisements.slice(0, DISPLAY_PINS_LIMIT));
     window.form.toggleFormElementsState();
     window.pin.userPin.removeEventListener('mousedown', userPinfirstMousedownHandler);

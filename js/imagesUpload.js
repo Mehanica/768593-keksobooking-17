@@ -4,7 +4,7 @@
 
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var formElement = document.querySelector('.ad-form');
-  var fileChooser = formElement.querySelector('.ad-form__field input[type=file]');
+  var avatarInput = formElement.querySelector('.ad-form__field input[type=file]');
   var avatarDropZone = formElement.querySelector('.ad-form-header__drop-zone');
   var userPhotoDropZone = formElement.querySelector('.ad-form__drop-zone');
   var preview = formElement.querySelector('.ad-form-header__preview img');
@@ -12,8 +12,8 @@
   var photoDropeZone = formElement.querySelector('.ad-form__upload input[type=file]');
   var photoContainer = formElement.querySelector('.ad-form__photo');
 
-  fileChooser.addEventListener('change', function () {
-    var file = fileChooser.files[0];
+  var avatarInputChangeHandler = function () {
+    var file = avatarInput.files[0];
     var fileName = file.name.toLowerCase();
     var matches = FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
@@ -27,22 +27,30 @@
       });
       reader.readAsDataURL(file);
     }
-  });
+  };
 
-  var preventDefaults = function (evt) {
+  var avatarDropZoneDragenterHandler = function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
+    evt.target.style.backgroundColor = 'lightgreen';
   };
 
-  var highlight = function (evt) {
-    evt.target.style.backgroundColor = 'green';
+  var avatarDropZoneDragoverHandler = function (evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    evt.target.style.backgroundColor = 'lightgreen';
   };
 
-  var unhighlight = function (evt) {
+  var avatarDropZoneDragleaveHandler = function (evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
     evt.target.style.backgroundColor = '';
   };
 
-  var handleDrop = function (evt) {
+  var avatarDropZoneDropHandlder = function (evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    evt.target.style.backgroundColor = '';
     evt.dataTransfer.dropEffect = 'copy';
     var file = evt.dataTransfer.files[0];
     var fileName = file.name.toLowerCase();
@@ -60,21 +68,7 @@
     }
   };
 
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (eventName) {
-    avatarDropZone.addEventListener(eventName, preventDefaults, false);
-  });
-
-  ['dragenter', 'dragover'].forEach(function (eventName) {
-    avatarDropZone.addEventListener(eventName, highlight, false);
-  });
-
-  ['dragleave', 'drop'].forEach(function (eventName) {
-    avatarDropZone.addEventListener(eventName, unhighlight, false);
-  });
-
-  avatarDropZone.addEventListener('drop', handleDrop, false);
-
-  photoDropeZone.addEventListener('change', function () {
+  var photoDropeZoneChangeHandler = function () {
     var file = photoDropeZone.files[0];
     var fileName = file.name.toLowerCase();
     var matches = FILE_TYPES.some(function (it) {
@@ -94,9 +88,30 @@
       });
       reader.readAsDataURL(file);
     }
-  });
+  };
 
-  var handleDropUserPhoto = function (evt) {
+  var userPhotoDropZoneDragenterHandler = function (evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    evt.target.style.backgroundColor = 'lightgreen';
+  };
+
+  var userPhotoDropZoneDragoverHandler = function (evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    evt.target.style.backgroundColor = 'lightgreen';
+  };
+
+  var userPhotoDropZoneDragleaveHandler = function (evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    evt.target.style.backgroundColor = '';
+  };
+
+  var userPhotoDropZoneDropHandler = function (evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    evt.target.style.backgroundColor = '';
     evt.dataTransfer.dropEffect = 'copy';
     [].forEach.call(evt.dataTransfer.files, function (file) {
       var fileName = file.name.toLowerCase();
@@ -121,19 +136,31 @@
     });
   };
 
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (eventName) {
-    userPhotoDropZone.addEventListener(eventName, preventDefaults, false);
-  });
+  var enablePicturesUpload = function () {
+    avatarInput.addEventListener('change', avatarInputChangeHandler);
+    avatarDropZone.addEventListener('dragenter', avatarDropZoneDragenterHandler, false);
+    avatarDropZone.addEventListener('dragover', avatarDropZoneDragoverHandler, false);
+    avatarDropZone.addEventListener('dragleave', avatarDropZoneDragleaveHandler, false);
+    avatarDropZone.addEventListener('drop', avatarDropZoneDropHandlder, false);
+    photoDropeZone.addEventListener('change', photoDropeZoneChangeHandler);
+    userPhotoDropZone.addEventListener('dragenter', userPhotoDropZoneDragenterHandler, false);
+    userPhotoDropZone.addEventListener('dragover', userPhotoDropZoneDragoverHandler, false);
+    userPhotoDropZone.addEventListener('dragleave', userPhotoDropZoneDragleaveHandler, false);
+    userPhotoDropZone.addEventListener('drop', userPhotoDropZoneDropHandler, false);
+  };
 
-  ['dragenter', 'dragover'].forEach(function (eventName) {
-    userPhotoDropZone.addEventListener(eventName, highlight, false);
-  });
-
-  ['dragleave', 'drop'].forEach(function (eventName) {
-    userPhotoDropZone.addEventListener(eventName, unhighlight, false);
-  });
-
-  userPhotoDropZone.addEventListener('drop', handleDropUserPhoto, false);
+  var disablePucturesUpload = function () {
+    avatarInput.removeEventListener('change', avatarInputChangeHandler);
+    avatarDropZone.removeEventListener('dragenter', avatarDropZoneDragenterHandler, false);
+    avatarDropZone.removeEventListener('dragover', avatarDropZoneDragoverHandler, false);
+    avatarDropZone.removeEventListener('dragleave', avatarDropZoneDragleaveHandler, false);
+    avatarDropZone.removeEventListener('drop', avatarDropZoneDropHandlder, false);
+    photoDropeZone.removeEventListener('change', photoDropeZoneChangeHandler);
+    userPhotoDropZone.removeEventListener('dragenter', userPhotoDropZoneDragenterHandler, false);
+    userPhotoDropZone.removeEventListener('dragover', userPhotoDropZoneDragoverHandler, false);
+    userPhotoDropZone.removeEventListener('dragleave', userPhotoDropZoneDragleaveHandler, false);
+    userPhotoDropZone.removeEventListener('drop', userPhotoDropZoneDropHandler, false);
+  };
 
   var resetAvatarPhoto = function () {
     if (preview.src !== defaultAvatarSrc) {
@@ -149,7 +176,11 @@
 
   window.imagesUpload = {
     formElement: formElement,
+    avatarInput: avatarInput,
+    photoDropeZone: photoDropeZone,
     resetAvatarPhoto: resetAvatarPhoto,
-    resetUserPhoto: resetUserPhoto
+    resetUserPhoto: resetUserPhoto,
+    enablePicturesDropZones: enablePicturesUpload,
+    disablePucturesDropZones: disablePucturesUpload
   };
 })();
