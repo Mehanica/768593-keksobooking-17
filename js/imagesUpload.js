@@ -6,14 +6,11 @@
   var formElement = document.querySelector('.ad-form');
   var fileChooser = formElement.querySelector('.ad-form__field input[type=file]');
   var avatarDropZone = formElement.querySelector('.ad-form-header__drop-zone');
+  var userPhotoDropZone = formElement.querySelector('.ad-form__drop-zone');
   var preview = formElement.querySelector('.ad-form-header__preview img');
   var defaultAvatarSrc = 'img/muffin-grey.svg';
   var photoDropeZone = formElement.querySelector('.ad-form__upload input[type=file]');
   var photoContainer = formElement.querySelector('.ad-form__photo');
-
-  avatarDropZone.addEventListener('dragenter', function () {
-    console.log('dlji;oij;o');
-  });
 
   fileChooser.addEventListener('change', function () {
     var file = fileChooser.files[0];
@@ -39,6 +36,10 @@
 
   var highlight = function (evt) {
     evt.target.style.backgroundColor = 'green';
+  };
+
+  var unhighlight = function (evt) {
+    evt.target.style.backgroundColor = '';
   };
 
   var handleDrop = function (evt) {
@@ -67,8 +68,11 @@
     avatarDropZone.addEventListener(eventName, highlight, false);
   });
 
+  ['dragleave', 'drop'].forEach(function (eventName) {
+    avatarDropZone.addEventListener(eventName, unhighlight, false);
+  });
+
   avatarDropZone.addEventListener('drop', handleDrop, false);
-  console.log(avatarDropZone);
 
   photoDropeZone.addEventListener('change', function () {
     var file = photoDropeZone.files[0];
@@ -116,14 +120,18 @@
   };
 
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (eventName) {
-    photoDropeZone.addEventListener(eventName, preventDefaults, false);
+    userPhotoDropZone.addEventListener(eventName, preventDefaults, false);
   });
 
   ['dragenter', 'dragover'].forEach(function (eventName) {
-    photoDropeZone.addEventListener(eventName, highlight, false);
+    userPhotoDropZone.addEventListener(eventName, highlight, false);
   });
 
-  photoDropeZone.addEventListener('drop', handleDropUserPhoto, false);
+  ['dragleave', 'drop'].forEach(function (eventName) {
+    userPhotoDropZone.addEventListener(eventName, unhighlight, false);
+  });
+
+  userPhotoDropZone.addEventListener('drop', handleDropUserPhoto, false);
 
 
   var resetAvatarPhoto = function () {
