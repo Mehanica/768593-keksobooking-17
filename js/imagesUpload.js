@@ -109,6 +109,7 @@
 
         reader.addEventListener('load', function () {
           var image = document.createElement('img');
+
           image.width = '75';
           image.height = '70';
           image.src = reader.result;
@@ -133,7 +134,6 @@
   });
 
   userPhotoDropZone.addEventListener('drop', handleDropUserPhoto, false);
-
 
   var resetAvatarPhoto = function () {
     if (preview.src !== defaultAvatarSrc) {
