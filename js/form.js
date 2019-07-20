@@ -92,11 +92,17 @@
     var EscKeyDownHandler = function (evt) {
       if (evt.keyCode === ESC_KEY_CODE) {
         elementContent.remove();
+
+        document.removeEventListener('keydown', EscKeyDownHandler);
+        document.removeEventListener('click', messageRemoveHandler);
       }
     };
 
     var messageRemoveHandler = function () {
       elementContent.remove();
+
+      document.removeEventListener('keydown', EscKeyDownHandler);
+      document.removeEventListener('click', messageRemoveHandler);
     };
 
     document.addEventListener('keydown', EscKeyDownHandler);
@@ -119,19 +125,31 @@
   var formElementErrorHandler = function () {
     var element = window.data.popupError.content.cloneNode(true);
     var elementContent = element.children[0];
+    var errorButton = element.querySelector('.error__button');
 
     window.data.main.appendChild(element);
+
+    var errorButtonClickHandler = function () {
+      elementContent.remove();
+    };
 
     var EscKeyDownHandler = function (evt) {
       if (evt.keyCode === ESC_KEY_CODE) {
         elementContent.remove();
+
+        document.removeEventListener('keydown', EscKeyDownHandler);
+        document.removeEventListener('click', messageRemoveHandler);
       }
     };
 
     var messageRemoveHandler = function () {
       elementContent.remove();
+
+      document.removeEventListener('keydown', EscKeyDownHandler);
+      document.removeEventListener('click', messageRemoveHandler);
     };
 
+    errorButton.addEventListener('click', errorButtonClickHandler);
     document.addEventListener('keydown', EscKeyDownHandler);
     document.addEventListener('click', messageRemoveHandler);
   };

@@ -20,6 +20,7 @@
   var renderPhoto = function (data, container, photo) {
     data.forEach(function (item) {
       var photoCopy = photo.cloneNode(true);
+
       photoCopy.src = item;
       container.appendChild(photoCopy);
     });
@@ -41,6 +42,7 @@
     getFeatures(advertisement, featuresElements);
     if (featuresElements.length === 0) {
       var featuresList = SAMPLE.querySelector('.popup__features');
+
       featuresList.remove();
     }
 
