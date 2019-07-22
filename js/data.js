@@ -2,7 +2,7 @@
 
 (function () {
 
-  var URL = 'https://js.dump.academy/keksobooking/data22';
+  var URL = 'https://js.dump.academy/keksobooking/data';
   var URL_SEND = 'https://js.dump.academy/keksobooking';
   var SUCCESSFUL_STATUS = 200;
   var XHR_TIMEOUT = 5000;
