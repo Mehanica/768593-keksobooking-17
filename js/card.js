@@ -3,9 +3,11 @@
 (function () {
 
   var SAMPLE = document.querySelector('#card').content.querySelector('.popup');
+  var ROOM_NOUNS = ['комата', 'комнаты', 'комнат'];
+  var GUEST_NOUNS = ['гостя', 'гостей'];
+  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
   var getFeatures = function (data, featuresElements) {
-    var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
     FEATURES.forEach(function (item, index) {
 
@@ -18,6 +20,7 @@
   var renderPhoto = function (data, container, photo) {
     data.forEach(function (item) {
       var photoCopy = photo.cloneNode(true);
+
       photoCopy.src = item;
       container.appendChild(photoCopy);
     });
@@ -33,14 +36,13 @@
     var photosContainer = item.querySelector('.popup__photos');
     var photos = advertisement.offer.photos;
     var photo = photosContainer.children[0];
-    var ROOM_NOUNS = ['комата', 'комнаты', 'комнат'];
-    var GUEST_NOUNS = ['гостя', 'гостей'];
 
     photosContainer.innerHTML = '';
 
     getFeatures(advertisement, featuresElements);
     if (featuresElements.length === 0) {
       var featuresList = SAMPLE.querySelector('.popup__features');
+
       featuresList.remove();
     }
 

@@ -5,14 +5,23 @@
   var URL = 'https://js.dump.academy/keksobooking/data';
   var URL_SEND = 'https://js.dump.academy/keksobooking';
   var SUCCESSFUL_STATUS = 200;
-  var mainElement = document.querySelector('main');
   var XHR_TIMEOUT = 5000;
+  var mainElement = document.querySelector('main');
   var popupError = document.querySelector('#error');
 
   var onError = function () {
     var element = popupError.content.cloneNode(true);
+    var errorButton = element.querySelector('.error__button');
+    var errorMassage = element.querySelector('.error__message');
 
+    errorMassage.innerHTML = 'Ошибка загрузки данных';
     mainElement.appendChild(element);
+
+    var errorButtonClickHandler = function () {
+      document.location.reload();
+    };
+
+    errorButton.addEventListener('click', errorButtonClickHandler);
   };
 
   window.download = function (onSuccess) {
@@ -20,7 +29,6 @@
 
     xhr.responseType = 'json';
     xhr.open('GET', URL);
-
     xhr.addEventListener('load', function () {
 
       if (xhr.status === SUCCESSFUL_STATUS) {
@@ -47,9 +55,7 @@
     });
 
     xhr.addEventListener('timeout', formElementErrorHandler);
-
     xhr.timeout = XHR_TIMEOUT;
-
     xhr.open('POST', URL_SEND);
     xhr.send(data);
   };

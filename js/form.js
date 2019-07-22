@@ -1,37 +1,35 @@
 'use strict';
 
 (function () {
+  var ESC_KEY_CODE = 27;
 
-  var TYPE_PRICE = {
+  var TypePrice = {
     'flat': '1000',
     'bungalo': '0',
     'house': '5000',
     'palace': '10000'
   };
 
-  var ROOMS_CAPACITY = {
+  var RoomsCapacity = {
     '1': ['1'],
     '2': ['2', '1'],
     '3': ['3', '2', '1'],
     '100': ['0']
   };
 
-  var ESC_KEY_CODE = 27;
-  var formElement = document.querySelector('.ad-form');
   var map = document.querySelector('.map');
   var filtersForm = map.querySelector('.map__filters');
   var mapFilters = filtersForm.querySelectorAll('.map__filter');
   var mapFilterFeatures = filtersForm.querySelector('.map__features');
-  var adFormElements = formElement.querySelectorAll('.ad-form__element');
-  var selectTypeOfHousing = formElement.querySelector('#type');
-  var priceField = formElement.querySelector('#price');
+  var adFormElements = window.imagesUpload.formElement.querySelectorAll('.ad-form__element');
+  var selectTypeOfHousing = window.imagesUpload.formElement.querySelector('#type');
+  var priceField = window.imagesUpload.formElement.querySelector('#price');
   var selectRoomNumber = document.querySelector('#room_number');
   var selectCapacity = document.querySelector('#capacity');
-  var selectTimein = formElement.querySelector('#timein');
-  var selectTimeout = formElement.querySelector('#timeout');
-  var titleField = formElement.querySelector('#title');
+  var selectTimein = window.imagesUpload.formElement.querySelector('#timein');
+  var selectTimeout = window.imagesUpload.formElement.querySelector('#timeout');
+  var titleField = window.imagesUpload.formElement.querySelector('#title');
   var inputAddress = document.querySelector('#address');
-
 
   var toggleElementsListState = function (elementsList) {
 
@@ -44,10 +42,12 @@
     toggleElementsListState(mapFilters);
     toggleElementsListState(adFormElements);
     toggleElementsListState(mapFilterFeatures);
+    window.imagesUpload.avatarInput.disabled = !window.imagesUpload.avatarInput.disabled;
+    window.imagesUpload.photoDropeZone.disabled = !window.imagesUpload.photoDropeZone.disabled;
   };
 
   var selectTypeOfHousingChangeHandler = function () {
-    var minPrice = TYPE_PRICE[selectTypeOfHousing.value];
+    var minPrice = TypePrice[selectTypeOfHousing.value];
 
     priceField.min = minPrice;
     priceField.placeholder = minPrice;
@@ -59,9 +59,9 @@
 
     if (selectCapacity.options.length > 0) {
       [].forEach.call(selectCapacity.options, function (item) {
-        item.selected = ROOMS_CAPACITY[selectRoomNumber.value][0] === item.value;
-        item.hidden = !(ROOMS_CAPACITY[selectRoomNumber.value].indexOf(item.value) >= 0);
-        item.disabled = !(ROOMS_CAPACITY[selectRoomNumber.value].indexOf(item.value) >= 0);
+        item.selected = RoomsCapacity[selectRoomNumber.value][0] === item.value;
+        item.hidden = !(RoomsCapacity[selectRoomNumber.value].indexOf(item.value) >= 0);
+        item.disabled = !(RoomsCapacity[selectRoomNumber.value].indexOf(item.value) >= 0);
       });
     }
   };
@@ -92,53 +92,74 @@
     var EscKeyDownHandler = function (evt) {
       if (evt.keyCode === ESC_KEY_CODE) {
         elementContent.remove();
+
+        document.removeEventListener('keydown', EscKeyDownHandler);
+        document.removeEventListener('click', messageRemoveHandler);
       }
     };
 
     var messageRemoveHandler = function () {
       elementContent.remove();
+
+      document.removeEventListener('keydown', EscKeyDownHandler);
+      document.removeEventListener('click', messageRemoveHandler);
     };
 
     document.addEventListener('keydown', EscKeyDownHandler);
     document.addEventListener('click', messageRemoveHandler);
 
     map.classList.add('map--faded');
-    formElement.classList.add('ad-form--disabled');
-    formElement.reset();
+    window.imagesUpload.formElement.classList.add('ad-form--disabled');
+    window.imagesUpload.formElement.reset();
     toggleFormElementsState();
     window.map.remove();
     window.card.remove();
     window.pin.resetUserPinStartCoordinates();
+    window.imagesUpload.resetAvatarPhoto();
+    window.imagesUpload.resetUserPhoto();
     inputAddress.value = window.pin.getUserPinLocation();
+    window.imagesUpload.disablePucturesDropZones();
     window.pin.userPin.addEventListener('mousedown', window.map.userPinfirstMousedownHandler);
   };
 
   var formElementErrorHandler = function () {
     var element = window.data.popupError.content.cloneNode(true);
     var elementContent = element.children[0];
+    var errorButton = element.querySelector('.error__button');
 
     window.data.main.appendChild(element);
+
+    var errorButtonClickHandler = function () {
+      elementContent.remove();
+    };
 
     var EscKeyDownHandler = function (evt) {
       if (evt.keyCode === ESC_KEY_CODE) {
         elementContent.remove();
+
+        document.removeEventListener('keydown', EscKeyDownHandler);
+        document.removeEventListener('click', messageRemoveHandler);
       }
     };
 
     var messageRemoveHandler = function () {
       elementContent.remove();
+
+      document.removeEventListener('keydown', EscKeyDownHandler);
+      document.removeEventListener('click', messageRemoveHandler);
     };
 
+    errorButton.addEventListener('click', errorButtonClickHandler);
     document.addEventListener('keydown', EscKeyDownHandler);
     document.addEventListener('click', messageRemoveHandler);
   };
 
   var formElementSubmitHandler = function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(formElement), formElementSuccessHandler, formElementErrorHandler);
+    window.upload(new FormData(window.imagesUpload.formElement), formElementSuccessHandler, formElementErrorHandler);
   };
 
-  formElement.addEventListener('submit', formElementSubmitHandler);
+  window.imagesUpload.formElement.addEventListener('submit', formElementSubmitHandler);
 
   var inputInvalidHadler = function (evt) {
     var target = evt.target;
@@ -156,7 +177,6 @@
   window.form = {
     mapElement: map,
     inputAddress: inputAddress,
-    formElement: formElement,
     toggleFormElementsState: toggleFormElementsState
   };
 })();
