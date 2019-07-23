@@ -11,8 +11,8 @@
   };
 
   var locationBorderY = {
-    min: 130,
-    max: 630
+    min: 46,
+    max: 546
   };
 
   var mapPins = window.form.cityMap.querySelector('.map__pins');
@@ -26,7 +26,7 @@
     showPins(advertisements.slice(0, DISPLAY_PINS_LIMIT));
     window.form.toggleFormElementsState();
     window.pin.mainLocation.removeEventListener('mousedown', mainLocationFirstMousedownHandler);
-    document.addEventListener('keydown', onEscKeyDown);
+    document.addEventListener('keydown', EscKeyDownHandler);
   };
 
   var successHandler = function (data) {
@@ -69,7 +69,7 @@
     }
   };
 
-  var onEscKeyDown = function () {
+  var EscKeyDownHandler = function () {
     window.card.remove();
   };
 

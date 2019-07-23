@@ -30,6 +30,7 @@
   var selectTimeout = window.imagesUpload.adForm.querySelector('#timeout');
   var titleField = window.imagesUpload.adForm.querySelector('#title');
   var inputAddress = document.querySelector('#address');
+  var resetButton = window.imagesUpload.adForm.querySelector('.ad-form__reset');
 
   var toggleElementsListState = function (elementsList) {
     [].forEach.call(elementsList, function (item) {
@@ -84,6 +85,21 @@
 
   selectTimeout.addEventListener('change', selectTimeoutChangeHandler);
 
+  var resetApplication = function () {
+    map.classList.add('map--faded');
+    window.imagesUpload.adForm.classList.add('ad-form--disabled');
+    window.imagesUpload.adForm.reset();
+    toggleFormElementsState();
+    window.map.remove();
+    window.card.remove();
+    window.pin.resetUserStartCoordinates();
+    window.imagesUpload.resetAvatarPhoto();
+    window.imagesUpload.resetUserPhoto();
+    inputAddress.value = window.pin.getUserLocation();
+    window.imagesUpload.disablePucturesDropZones();
+    window.pin.mainLocation.addEventListener('mousedown', window.map.mainLocationFirstMousedownHandler);
+  };
+
   var adFormSuccessHandler = function () {
     var popupSuccess = document.querySelector('#success');
     var element = popupSuccess.content.cloneNode(true);
@@ -110,18 +126,7 @@
     document.addEventListener('keydown', EscKeyDownHandler);
     document.addEventListener('click', messageRemoveHandler);
 
-    map.classList.add('map--faded');
-    window.imagesUpload.adForm.classList.add('ad-form--disabled');
-    window.imagesUpload.adForm.reset();
-    toggleFormElementsState();
-    window.map.remove();
-    window.card.remove();
-    window.pin.resetUserStartCoordinates();
-    window.imagesUpload.resetAvatarPhoto();
-    window.imagesUpload.resetUserPhoto();
-    inputAddress.value = window.pin.getUserLocation();
-    window.imagesUpload.disablePucturesDropZones();
-    window.pin.mainLocation.addEventListener('mousedown', window.map.mainLocationfirstMousedownHandler);
+    resetApplication();
   };
 
   var adFormErrorHandler = function () {
@@ -175,6 +180,12 @@
   priceField.addEventListener('invalid', function (evt) {
     inputInvalidHadler(evt);
   });
+
+  var resetButtonClickHandler = function () {
+    resetApplication();
+  };
+
+  resetButton.addEventListener('click', resetButtonClickHandler);
 
   window.form = {
     cityMap: map,
