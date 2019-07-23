@@ -21,21 +21,20 @@
   var filtersForm = map.querySelector('.map__filters');
   var mapFilters = filtersForm.querySelectorAll('.map__filter');
   var mapFilterFeatures = filtersForm.querySelector('.map__features');
-  var adFormElements = window.imagesUpload.formElement.querySelectorAll('.ad-form__element');
-  var selectTypeOfHousing = window.imagesUpload.formElement.querySelector('#type');
-  var priceField = window.imagesUpload.formElement.querySelector('#price');
+  var adFormElements = window.imagesUpload.adForm.querySelectorAll('.ad-form__element');
+  var selectTypeOfHousing = window.imagesUpload.adForm.querySelector('#type');
+  var priceField = window.imagesUpload.adForm.querySelector('#price');
   var selectRoomNumber = document.querySelector('#room_number');
   var selectCapacity = document.querySelector('#capacity');
-  var selectTimein = window.imagesUpload.formElement.querySelector('#timein');
-  var selectTimeout = window.imagesUpload.formElement.querySelector('#timeout');
-  var titleField = window.imagesUpload.formElement.querySelector('#title');
+  var selectTimein = window.imagesUpload.adForm.querySelector('#timein');
+  var selectTimeout = window.imagesUpload.adForm.querySelector('#timeout');
+  var titleField = window.imagesUpload.adForm.querySelector('#title');
   var inputAddress = document.querySelector('#address');
 
   var toggleElementsListState = function (elementsList) {
-
-    for (var i = 0; i < elementsList.length; i++) {
-      elementsList[i].disabled = !elementsList[i].disabled;
-    }
+    [].forEach.call(elementsList, function (item) {
+      item.disabled = !item.disabled;
+    });
   };
 
   var toggleFormElementsState = function () {
@@ -59,9 +58,12 @@
 
     if (selectCapacity.options.length > 0) {
       [].forEach.call(selectCapacity.options, function (item) {
-        item.selected = RoomsCapacity[selectRoomNumber.value][0] === item.value;
-        item.hidden = !(RoomsCapacity[selectRoomNumber.value].indexOf(item.value) >= 0);
-        item.disabled = !(RoomsCapacity[selectRoomNumber.value].indexOf(item.value) >= 0);
+        var value = RoomsCapacity[selectRoomNumber.value];
+        var isHidden = !(value.indexOf(item.value) >= 0);
+
+        item.selected = value[0] === item.value;
+        item.hidden = isHidden;
+        item.disabled = isHidden;
       });
     }
   };
@@ -82,7 +84,7 @@
 
   selectTimeout.addEventListener('change', selectTimeoutChangeHandler);
 
-  var formElementSuccessHandler = function () {
+  var adFormSuccessHandler = function () {
     var popupSuccess = document.querySelector('#success');
     var element = popupSuccess.content.cloneNode(true);
     var elementContent = element.children[0];
@@ -109,20 +111,20 @@
     document.addEventListener('click', messageRemoveHandler);
 
     map.classList.add('map--faded');
-    window.imagesUpload.formElement.classList.add('ad-form--disabled');
-    window.imagesUpload.formElement.reset();
+    window.imagesUpload.adForm.classList.add('ad-form--disabled');
+    window.imagesUpload.adForm.reset();
     toggleFormElementsState();
     window.map.remove();
     window.card.remove();
-    window.pin.resetUserPinStartCoordinates();
+    window.pin.resetUserStartCoordinates();
     window.imagesUpload.resetAvatarPhoto();
     window.imagesUpload.resetUserPhoto();
-    inputAddress.value = window.pin.getUserPinLocation();
+    inputAddress.value = window.pin.getUserLocation();
     window.imagesUpload.disablePucturesDropZones();
-    window.pin.userPin.addEventListener('mousedown', window.map.userPinfirstMousedownHandler);
+    window.pin.mainLocation.addEventListener('mousedown', window.map.mainLocationfirstMousedownHandler);
   };
 
-  var formElementErrorHandler = function () {
+  var adFormErrorHandler = function () {
     var element = window.data.popupError.content.cloneNode(true);
     var elementContent = element.children[0];
     var errorButton = element.querySelector('.error__button');
@@ -154,12 +156,12 @@
     document.addEventListener('click', messageRemoveHandler);
   };
 
-  var formElementSubmitHandler = function (evt) {
+  var adFormSubmitHandler = function (evt) {
     evt.preventDefault();
-    window.upload(new FormData(window.imagesUpload.formElement), formElementSuccessHandler, formElementErrorHandler);
+    window.data.upload(adFormErrorHandler, adFormSuccessHandler, new FormData(window.imagesUpload.adForm));
   };
 
-  window.imagesUpload.formElement.addEventListener('submit', formElementSubmitHandler);
+  window.imagesUpload.adForm.addEventListener('submit', adFormSubmitHandler);
 
   var inputInvalidHadler = function (evt) {
     var target = evt.target;
@@ -175,7 +177,7 @@
   });
 
   window.form = {
-    mapElement: map,
+    cityMap: map,
     inputAddress: inputAddress,
     toggleFormElementsState: toggleFormElementsState
   };
