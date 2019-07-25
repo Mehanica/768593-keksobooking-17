@@ -5,14 +5,11 @@
   var MAP_WIDTH = 1200;
   var USER_PIN_WIDTH = 62;
 
-  var locationBorderX = {
-    min: 0,
-    max: MAP_WIDTH - USER_PIN_WIDTH
-  };
-
-  var locationBorderY = {
-    min: 46,
-    max: 546
+  var locationLimit = {
+    top: 46,
+    bottom: 546,
+    left: 0,
+    right: MAP_WIDTH - USER_PIN_WIDTH
   };
 
   var mapPins = window.form.cityMap.querySelector('.map__pins');
@@ -54,23 +51,26 @@
 
   var calcLocationBorder = function (x, y) {
 
-    if (y < locationBorderY.min) {
-      window.pin.mainLocation.style.top = locationBorderY.min + 'px';
-
-    } else if (y > locationBorderY.max) {
-      window.pin.mainLocation.style.top = locationBorderY.max + 'px';
-
-    } else if (x < locationBorderX.min) {
-
-      window.pin.mainLocation.style.left = locationBorderX.min + 'px';
-    } else if (x > locationBorderX.max) {
-
-      window.pin.mainLocation.style.left = locationBorderX.max + 'px';
+    switch (true) {
+      case y < locationLimit.top:
+        window.pin.mainLocation.style.top = locationLimit.top + 'px';
+        break;
+      case y > locationLimit.bottom:
+        window.pin.mainLocation.style.top = locationLimit.bottom + 'px';
+        break;
+      case x < locationLimit.left:
+        window.pin.mainLocation.style.left = locationLimit.left + 'px';
+        break;
+      case x > locationLimit.right:
+        window.pin.mainLocation.style.left = locationLimit.right + 'px';
+        break;
     }
   };
 
-  var EscKeyDownHandler = function () {
-    window.card.remove();
+  var EscKeyDownHandler = function (evt) {
+    if (evt.keyCode === window.form.ESC_KEY_CODE) {
+      window.card.remove();
+    }
   };
 
   var mainLocationFirstMousedownHandler = function () {

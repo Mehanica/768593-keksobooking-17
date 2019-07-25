@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var ESC_KEY_CODE = 27;
 
   var TypePrice = {
@@ -43,7 +44,7 @@
     toggleElementsListState(adFormElements);
     toggleElementsListState(mapFilterFeatures);
     window.imagesUpload.avatarInput.disabled = !window.imagesUpload.avatarInput.disabled;
-    window.imagesUpload.photoDropeZone.disabled = !window.imagesUpload.photoDropeZone.disabled;
+    window.imagesUpload.photoDropZone.disabled = !window.imagesUpload.photoDropZone.disabled;
   };
 
   var selectTypeOfHousingChangeHandler = function () {
@@ -96,7 +97,7 @@
     window.imagesUpload.resetAvatarPhoto();
     window.imagesUpload.resetUserPhoto();
     inputAddress.value = window.pin.getUserLocation();
-    window.imagesUpload.disablePucturesDropZones();
+    window.imagesUpload.disablePicturesDropZones();
     window.pin.mainLocation.addEventListener('mousedown', window.map.mainLocationFirstMousedownHandler);
   };
 
@@ -108,7 +109,7 @@
     window.data.main.appendChild(element);
 
     var EscKeyDownHandler = function (evt) {
-      if (evt.keyCode === ESC_KEY_CODE) {
+      if (evt.keyCode === window.card.ESC_KEY_CODE) {
         elementContent.remove();
 
         document.removeEventListener('keydown', EscKeyDownHandler);
@@ -168,17 +169,17 @@
 
   window.imagesUpload.adForm.addEventListener('submit', adFormSubmitHandler);
 
-  var inputInvalidHadler = function (evt) {
+  var inputInvalidHandler = function (evt) {
     var target = evt.target;
     target.style.outline = '4px solid red';
   };
 
   titleField.addEventListener('invalid', function (evt) {
-    inputInvalidHadler(evt);
+    inputInvalidHandler(evt);
   });
 
   priceField.addEventListener('invalid', function (evt) {
-    inputInvalidHadler(evt);
+    inputInvalidHandler(evt);
   });
 
   var resetButtonClickHandler = function () {
@@ -188,6 +189,7 @@
   resetButton.addEventListener('click', resetButtonClickHandler);
 
   window.form = {
+    ESC_KEY_CODE: ESC_KEY_CODE,
     cityMap: map,
     inputAddress: inputAddress,
     toggleFormElementsState: toggleFormElementsState

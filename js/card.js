@@ -10,7 +10,6 @@
   var getFeatures = function (data, featuresElements) {
 
     CONVENIENCES.forEach(function (item, index) {
-
       if (data.offer.features.indexOf(item) === -1) {
         featuresElements[index].parentNode.removeChild(featuresElements[index]);
       }

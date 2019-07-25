@@ -9,7 +9,7 @@
   var userPhotoDropZone = adForm.querySelector('.ad-form__drop-zone');
   var preview = adForm.querySelector('.ad-form-header__preview img');
   var defaultAvatarSrc = 'img/muffin-grey.svg';
-  var photoDropeZone = adForm.querySelector('.ad-form__upload input[type=file]');
+  var photoDropZone = adForm.querySelector('.ad-form__upload input[type=file]');
   var photoContainer = adForm.querySelector('.ad-form__photo');
 
   var avatarInputChangeHandler = function () {
@@ -68,8 +68,8 @@
     }
   };
 
-  var photoDropeZoneChangeHandler = function () {
-    var file = photoDropeZone.files[0];
+  var photoDropZoneChangeHandler = function () {
+    var file = photoDropZone.files[0];
     var fileName = file.name.toLowerCase();
     var matches = FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
@@ -142,20 +142,20 @@
     avatarDropZone.addEventListener('dragover', avatarDropZoneDragoverHandler, false);
     avatarDropZone.addEventListener('dragleave', avatarDropZoneDragleaveHandler, false);
     avatarDropZone.addEventListener('drop', avatarDropZoneDropHandlder, false);
-    photoDropeZone.addEventListener('change', photoDropeZoneChangeHandler);
+    photoDropZone.addEventListener('change', photoDropZoneChangeHandler);
     userPhotoDropZone.addEventListener('dragenter', userPhotoDropZoneDragenterHandler, false);
     userPhotoDropZone.addEventListener('dragover', userPhotoDropZoneDragoverHandler, false);
     userPhotoDropZone.addEventListener('dragleave', userPhotoDropZoneDragleaveHandler, false);
     userPhotoDropZone.addEventListener('drop', userPhotoDropZoneDropHandler, false);
   };
 
-  var disablePucturesUpload = function () {
+  var disablePicturesUpload = function () {
     avatarInput.removeEventListener('change', avatarInputChangeHandler);
     avatarDropZone.removeEventListener('dragenter', avatarDropZoneDragenterHandler, false);
     avatarDropZone.removeEventListener('dragover', avatarDropZoneDragoverHandler, false);
     avatarDropZone.removeEventListener('dragleave', avatarDropZoneDragleaveHandler, false);
     avatarDropZone.removeEventListener('drop', avatarDropZoneDropHandlder, false);
-    photoDropeZone.removeEventListener('change', photoDropeZoneChangeHandler);
+    photoDropZone.removeEventListener('change', photoDropZoneChangeHandler);
     userPhotoDropZone.removeEventListener('dragenter', userPhotoDropZoneDragenterHandler, false);
     userPhotoDropZone.removeEventListener('dragover', userPhotoDropZoneDragoverHandler, false);
     userPhotoDropZone.removeEventListener('dragleave', userPhotoDropZoneDragleaveHandler, false);
@@ -177,10 +177,10 @@
   window.imagesUpload = {
     adForm: adForm,
     avatarInput: avatarInput,
-    photoDropeZone: photoDropeZone,
+    photoDropZone: photoDropZone,
     resetAvatarPhoto: resetAvatarPhoto,
     resetUserPhoto: resetUserPhoto,
     enablePicturesDropZones: enablePicturesUpload,
-    disablePucturesDropZones: disablePucturesUpload
+    disablePicturesDropZones: disablePicturesUpload
   };
 })();
