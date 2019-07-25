@@ -2,20 +2,19 @@
 
 (function () {
 
-  var URL = 'https://js.dump.academy/keksobooking/data';
-  var URL_SEND = 'https://js.dump.academy/keksobooking';
+  var URL = 'https://js.dump.academy/keksobooking';
   var SUCCESSFUL_STATUS = 200;
   var XHR_TIMEOUT = 5000;
-  var mainElement = document.querySelector('main');
+  var main = document.querySelector('main');
   var popupError = document.querySelector('#error');
 
-  var onError = function () {
+  var errorHandler = function () {
     var element = popupError.content.cloneNode(true);
     var errorButton = element.querySelector('.error__button');
     var errorMassage = element.querySelector('.error__message');
 
     errorMassage.innerHTML = 'Ошибка загрузки данных';
-    mainElement.appendChild(element);
+    main.appendChild(element);
 
     var errorButtonClickHandler = function () {
       document.location.reload();
@@ -24,11 +23,9 @@
     errorButton.addEventListener('click', errorButtonClickHandler);
   };
 
-  window.download = function (onSuccess) {
+  var createRequest = function (onError, onSuccess) {
     var xhr = new XMLHttpRequest();
-
     xhr.responseType = 'json';
-    xhr.open('GET', URL);
     xhr.addEventListener('load', function () {
 
       if (xhr.status === SUCCESSFUL_STATUS) {
@@ -38,30 +35,30 @@
       }
     });
 
+    xhr.addEventListener('timeout', onError);
+    xhr.timeout = XHR_TIMEOUT;
+
+    return xhr;
+  };
+
+  var download = function (onSuccess) {
+    var xhr = createRequest(errorHandler, onSuccess);
+
+    xhr.open('GET', URL + '/data');
     xhr.send();
   };
 
-  window.upload = function (data, formElementSuccessHandler, formElementErrorHandler) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
+  var upload = function (onError, onSuccess, data) {
+    var xhr = createRequest(onError, onSuccess);
 
-    xhr.addEventListener('load', function () {
-
-      if (xhr.status === SUCCESSFUL_STATUS) {
-        formElementSuccessHandler();
-      } else {
-        formElementErrorHandler();
-      }
-    });
-
-    xhr.addEventListener('timeout', formElementErrorHandler);
-    xhr.timeout = XHR_TIMEOUT;
-    xhr.open('POST', URL_SEND);
+    xhr.open('POST', URL);
     xhr.send(data);
   };
 
   window.data = {
-    main: mainElement,
-    popupError: popupError
+    main: main,
+    popupError: popupError,
+    download: download,
+    upload: upload
   };
 })();

@@ -3,14 +3,14 @@
 (function () {
 
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  var formElement = document.querySelector('.ad-form');
-  var avatarInput = formElement.querySelector('.ad-form__field input[type=file]');
-  var avatarDropZone = formElement.querySelector('.ad-form-header__drop-zone');
-  var userPhotoDropZone = formElement.querySelector('.ad-form__drop-zone');
-  var preview = formElement.querySelector('.ad-form-header__preview img');
+  var adForm = document.querySelector('.ad-form');
+  var avatarInput = adForm.querySelector('.ad-form__field input[type=file]');
+  var avatarDropZone = adForm.querySelector('.ad-form-header__drop-zone');
+  var userPhotoDropZone = adForm.querySelector('.ad-form__drop-zone');
+  var preview = adForm.querySelector('.ad-form-header__preview img');
   var defaultAvatarSrc = 'img/muffin-grey.svg';
-  var photoDropeZone = formElement.querySelector('.ad-form__upload input[type=file]');
-  var photoContainer = formElement.querySelector('.ad-form__photo');
+  var photoDropeZone = adForm.querySelector('.ad-form__upload input[type=file]');
+  var photoContainer = adForm.querySelector('.ad-form__photo');
 
   var avatarInputChangeHandler = function () {
     var file = avatarInput.files[0];
@@ -175,7 +175,7 @@
   };
 
   window.imagesUpload = {
-    formElement: formElement,
+    adForm: adForm,
     avatarInput: avatarInput,
     photoDropeZone: photoDropeZone,
     resetAvatarPhoto: resetAvatarPhoto,

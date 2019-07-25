@@ -5,11 +5,11 @@
   var SAMPLE = document.querySelector('#card').content.querySelector('.popup');
   var ROOM_NOUNS = ['комата', 'комнаты', 'комнат'];
   var GUEST_NOUNS = ['гостя', 'гостей'];
-  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  var CONVENIENCES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
   var getFeatures = function (data, featuresElements) {
 
-    FEATURES.forEach(function (item, index) {
+    CONVENIENCES.forEach(function (item, index) {
 
       if (data.offer.features.indexOf(item) === -1) {
         featuresElements[index].parentNode.removeChild(featuresElements[index]);
@@ -32,15 +32,15 @@
 
   var createCardClone = function (advertisement) {
     var item = SAMPLE.cloneNode(true);
-    var featuresElements = item.querySelectorAll('.popup__feature');
+    var features = item.querySelectorAll('.popup__feature');
     var photosContainer = item.querySelector('.popup__photos');
     var photos = advertisement.offer.photos;
     var photo = photosContainer.children[0];
 
     photosContainer.innerHTML = '';
 
-    getFeatures(advertisement, featuresElements);
-    if (featuresElements.length === 0) {
+    getFeatures(advertisement, features);
+    if (features.length === 0) {
       var featuresList = SAMPLE.querySelector('.popup__features');
 
       featuresList.remove();
@@ -105,16 +105,16 @@
   };
 
   var removeCard = function () {
-    var popup = window.form.mapElement.querySelector('.popup');
+    var popup = window.form.cityMap.querySelector('.popup');
 
     if (popup) {
-      window.form.mapElement.removeChild(popup);
+      window.form.cityMap.removeChild(popup);
     }
   };
 
   var createCard = function (data) {
     removeCard();
-    window.form.mapElement.appendChild(createCardClone(data));
+    window.form.cityMap.appendChild(createCardClone(data));
   };
 
   window.card = {

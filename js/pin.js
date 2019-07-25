@@ -51,10 +51,10 @@
 
 
   window.pin = {
-    userPinStartCoordinates: userPinStartCoordinates,
-    getUserPinLocation: getUserPinLocation,
-    userPin: userPin,
+    userStartCoordinates: userPinStartCoordinates,
+    getUserLocation: getUserPinLocation,
+    mainLocation: userPin,
     create: createPin,
-    resetUserPinStartCoordinates: resetUserPinStartCoordinates
+    resetUserStartCoordinates: resetUserPinStartCoordinates
   };
 })();
